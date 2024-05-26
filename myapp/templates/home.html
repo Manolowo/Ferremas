@@ -1,2 +1,39 @@
+<!-- home.html -->
 
-<h1>Home</h1>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ferremas</title>
+
+    <!-- .css -->
+    <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <div class="navbar">
+          <div class="logo">
+            <a href="/">
+              <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+            </a>
+          </div>
+
+          <div class="nav-items">
+            <ul>
+              <li><a href="#sobrenosotros-container">Nosotros</a></li>
+              <li><a href="#contacto-container">Contacto</a></li>
+              <li class="login-button">
+                <a href="#" id="loginModal">Iniciar sesión</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+  </body>
+</html>
