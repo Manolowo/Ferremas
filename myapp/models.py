@@ -34,7 +34,7 @@ class Empleado(models.Model):
     emp_fono = models.IntegerField(null=False)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     def __str__(self):
-        return self.emp_name +' '+ self.emp_lastname +' - '+ self.rol.rol_id 
+        return self.rol.rol_id +' - '+ self.emp_name +' '+ self.emp_lastname 
 
 """ ----------------------------------------Producto e inventario------------------------------------- """
 

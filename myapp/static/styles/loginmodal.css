@@ -1,0 +1,91 @@
+
+.modal {
+    font-family: "Arial", sans-serif;
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Posicionamiento fijo */
+    z-index: 1; /* Por encima de otros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Altura completa */
+    overflow: auto; /* Habilitar scroll si es necesario */
+    background-color: rgb(0, 0, 0); /* Fondo de color negro */
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo con opacidad */
+    padding-top: 60px; /* Espaciado superior */
+}
+
+/* Estilo del contenido del modal */
+.modal-content {
+    background-color: rgb(82, 2, 82); /* Color de fondo del contenido del modal */
+    margin: 5% auto; /* Centrando el modal */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%; /* Ancho del modal ajustado */
+    max-width: 400px; /* Ancho máximo ajustado */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Sombra */
+    color: #fff; /* Color del texto */
+}
+
+/* Estilo del botón de cierre */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo de los campos del formulario */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Estilo del botón */
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Estilo del enlace */
+a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
