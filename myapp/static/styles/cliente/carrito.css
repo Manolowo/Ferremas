@@ -1,0 +1,124 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin-left: 15px; /* Espacio a la izquierda */
+    margin-right: 15px; /* Espacio a la derecha */
+}
+
+.table {
+    width: calc(100% - 30px); /* Ancho igual al 100% del contenedor con un margen de 15px a cada lado */
+    border: 2px solid rgb(82, 2, 82);
+    border-radius: 5px;
+    padding: 3px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Estilos de la primera fila de la tabla */
+.table thead tr {
+    background-color: rgb(82, 2, 82); /* Morado */
+    color: #fff; /* Letras blancas */
+}
+
+.btn-container {
+    display: flex;
+    justify-content:space-around
+
+}
+
+/* Estilos de los botones */
+.btn-danger, .btn-success {
+    padding: 8px 16px; /* Ajuste de relleno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambio de cursor */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+    font-size: 14px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    
+}
+
+.btn-danger {
+    background-color: rgb(184, 6, 6); /* Morado */
+    color: #fff; /* Letras blancas */
+    
+}
+
+.btn-success {
+    background-color: #027e02; /* Verde */
+    color: #fff; /* Letras blancas */
+}
+
+/* Estilos de los botones al pasar el ratón */
+.btn-danger:hover, .btn-success:hover {
+    background-color: rgb(255, 0, 0); /* Morado más oscuro */
+}
+
+.btn-success:hover {
+    background-color: #0bda0b; /* Verde más oscuro */
+}
+
+/* Estilos para la columna de acciones */
+.actions-column {
+    width: 150px; /* Ancho máximo deseado para la columna de acciones */
+    white-space: nowrap; /* Evitar que los botones se envuelvan */
+    overflow: hidden; /* Ocultar cualquier contenido adicional que supere el ancho */
+}
+
+/* Estilos para los botones dentro de la columna de acciones */
+.actions-column .button-container {
+    display: flex; /* Utilizar el modelo de caja flexible */
+    justify-content: center; /* Centrar horizontalmente los elementos */
+    gap: 5px; /* Espacio entre los botones */
+}
+
+/* Estilos para los botones de arriba, abajo y eliminar */
+.acciones {
+    display: flex; /* Utilizar el modelo de caja flexible */
+    justify-content: center; /* Centrar horizontalmente los elementos */
+    gap: 5px; /* Espacio entre los botones */
+}
+
+/* Estilos para los botones de arriba, abajo y eliminar */
+.btn-more,
+.btn-less,
+.btn-none {
+    padding: 8px 16px; /* Ajuste de relleno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambio de cursor */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+    font-size: 14px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+}
+
+.btn-more {
+    background-color: #027e02;
+    color: #fff; /* Letras blancas */
+}
+
+.btn-less {
+    background-color: #09465e; /* Amarillo */
+    color: #ffffff; /* Letras negras */
+}
+
+.btn-none {
+    background-color: #dc3545; /* Rojo */
+    color: #fff; /* Letras blancas */
+}
+
+/* Estilos de los botones de arriba, abajo y eliminar al pasar el ratón */
+.btn-more:hover,
+.btn-less:hover,
+.btn-none:hover {
+    opacity: 0.8; /* Reducción de la opacidad al pasar el ratón */
+}

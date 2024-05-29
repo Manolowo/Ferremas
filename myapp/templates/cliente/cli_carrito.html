@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+        <!-- .css -->
+        <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+
+        <link rel="stylesheet" href="{% static '/styles/cliente/carrito.css' %}" />
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="navbar">
+            <div class="logo">
+                <a href="/cli_home">
+                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                </a>
+            </div>
+            <div class="nav-items">
+                <ul>
+                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
+        <h2>Carrito de Compras de {{ cliente.cli_name }} {{ cliente.cli_lastname }}, revisa tus productos antes de comprar.</h2>
+
+<!-- Carrito de Compras -->
+<div class="container">
+    <h2>CARRITO DE COMPRAS</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto_id, producto_info in request.session.carrito.items %}
+            <tr>
+                <td>{{ producto_info.nombre }}</td>
+                <td>${{ producto_info.precio }}</td>
+                <td>{{ producto_info.cantidad }}</td>
+                <td>${{ producto_info.subtotal }}</td>
+                <td class="actions-column">
+                    <!-- Agrega aquí enlaces para restar o eliminar productos -->
+                    <div class="acciones">
+                    <button type="button" class="btn btn-more" onclick="location.href='{% url 'Add' producto_id %}'">+</button>
+                    <button type="button" class="btn btn-less" onclick="location.href='{% url 'Sub' producto_id %}'">-</button>
+                    <button type="button" class="btn btn-none" onclick="location.href='{% url 'Del' producto_id %}'">Eliminar</button>
+                    </div>
+
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay productos en el carrito.</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-end">Total:</td>
+                <td colspan="2">${{ totalCarrito }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <div class="btn-container">
+        {% if request.session.carrito.items %}
+        <button type="button" onclick="location.href='{% url 'CLS' %}'" class="btn btn-danger">Limpiar Carrito</button>
+        <button type="button" class="btn btn-success">Realizar Compra</button>
+        {% endif %}
+    </div>
+</div>
+<!-- Fin del Carrito de Compras -->
+
+    </div>
+
+</body>
+</html>

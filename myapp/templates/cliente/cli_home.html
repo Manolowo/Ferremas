@@ -1,1 +1,74 @@
-<h1>Cli_Home</h1>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas</title>
+    <!-- .css -->
+    <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+
+    <link rel="stylesheet" href="{% static '/styles/cliente/productos.css' %}" />
+
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="navbar">
+            <div class="logo">
+                <a href="/cli_home">
+                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                </a>
+            </div>
+            <div class="nav-items">
+                <ul>
+                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                <li><a href="/cli_carrito" id="carrito-link"><i class="fas fa-shopping-cart"></i> Mi Carrito</a></li>
+                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
+        <h2> Bienvenido a Ferremas, {{cliente.cli_name}} {{cliente.cli_lastname}}.</h2>
+
+        <!-- Barra de búsqueda -->
+        
+        <div class="search-bar">
+            <div class="search-text">
+                <h3>Busca lo que necesites, ¡seguro lo tenemos para ti!</h3>
+            </div>
+            <div div class="search-input-container">
+                <input type="text" id="searchInput" placeholder="Buscar productos..." onkeyup="filtrarProductos()">
+            </div>
+        </div>
+        
+        <div class="card-container" id="productos-section">
+            {% for producto in productos %}
+                <div class="productos-card">
+                    <div class="card-header">
+                        <h5>{{ producto.prod_nom }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Marca: {{ producto.prod_marca }}</p>
+                        <p>Precio: ${{ producto.prod_prec }}</p>
+                        <p>Disponibles: {{ producto.inv_cantTotal }}</p>
+                    </div>
+                    <a href="{% url 'Add' producto.prod_id %}" class="btn-agregar-carrito">Agregar al Carrito</a>
+                </div>
+            {% endfor %}
+        </div>
+        
+    </div>
+
+    <footer>
+        <h2>Api conversion dinero</h2>
+    </footer>
+
+    <script src="{% static 'js/cliente/filtrarProductos.js' %}"></script>
+</body>
+</html>

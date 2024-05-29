@@ -1,0 +1,93 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+
+.productos-card {
+    background-color:rgb(82, 2, 82);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    width: 300px;
+    transition: transform 0.2s;
+}
+
+.productos-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header h5 {
+    font-size: 1.2em;
+    margin: 0;
+    color: rgb(255, 255, 255);
+}
+
+.card-body p {
+    font-size: 1em;
+    margin: 10px 0;
+    color: rgb(255, 255, 255);
+}
+
+/* Estilos del botón */
+.btn-agregar-carrito {
+    display: block;
+    padding: 10px 20px;
+    background-color: #19721c;
+    color: rgb(255, 255, 255);
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.2s;
+}
+
+.btn-agregar-carrito:hover {
+    background-color: #45a049;
+}
+
+/* Estilo del contenedor del input de búsqueda */
+.search-input-container {
+    width: 50%; /* Ancho del contenedor */
+    margin: 0 auto; /* Centrar horizontalmente */
+    margin-bottom: 20px; /* Espacio inferior */
+    text-align: center; /* Centrar el texto */
+}
+
+/* Estilo para el input de búsqueda */
+.search-input-container input {
+    width: 100%; /* Ancho del input */
+    padding: 10px; /* Espaciado interno */
+    font-size: 16px; /* Tamaño de fuente */
+    border: 1px solid #ccc; /* Borde */
+    border-radius: 5px; /* Bordes redondeados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+    outline: none; /* Sin borde de enfoque */
+    transition: all 0.3s ease; /* Transición suave */
+}
+
+.search-input-container input:focus {
+    border-color:rgb(82, 2, 82);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra al enfocar */
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar horizontalmente */
+}
+
+.search-text {
+    margin-top: 10px; /* Espacio entre el texto y el input */
+}

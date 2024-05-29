@@ -56,6 +56,7 @@ class Producto(models.Model):
         return self.prod_nom
 
 class Inventario(models.Model):
+    prod_id = models.AutoField(primary_key=True)
     prod_nom = models.CharField(max_length=50)
     prod_marca = models.CharField(max_length=25)
     prod_prec= models.IntegerField()
@@ -65,6 +66,7 @@ class Inventario(models.Model):
     
     def __str__(self):
         return self.prod_nom + '-' + self.prod_marca
+    
 
 """ ---------------------------------------Gestion de inventario--------------------------------------------"""
 

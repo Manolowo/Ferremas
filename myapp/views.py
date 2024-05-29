@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Cliente, Rol, Empleado
+from .models import Cliente, Rol, Empleado, Inventario
+
+from myapp.carrito import Carrito
 
 """ ----------------------------------------Home Principal------------------------------------- """
 
@@ -86,8 +88,58 @@ def cli_home(request):
         print("Cliente Profile for current user:", cliente)
     except Cliente.DoesNotExist:
         return JsonResponse({'error': 'Cliente no encontrado'})
+    
+    productos= Inventario.objects.all()
 
-    return render(request, 'cliente/cli_home.html', {'cliente': cliente})
+    return render(request, 'cliente/cli_home.html', {'cliente': cliente , 'productos': productos})
+
+def cli_carrito(request):
+    try:
+        cliente = Cliente.objects.get(cli_id=request.session['user_id'])
+        print("Cliente ID from session:", request.session.get('user_id'))
+        print("Cliente Profile for current user:", cliente)
+    except Cliente.DoesNotExist:
+        return JsonResponse({'error': 'Cliente no encontrado'})
+    
+    carrito = Carrito(request)
+    productos_en_carrito = carrito.carrito.values()
+    total_carrito = carrito.total_carrito()
+
+    return render(request, 'cliente/cli_carrito.html', {'cliente': cliente, 'productos': productos_en_carrito, 'totalCarrito': total_carrito})
+
+"""_____________________ Carrito _____________________"""
+
+def agregarProducto(request, prod_id):
+    carrito = Carrito(request)
+    try:
+        producto = Inventario.objects.get(prod_id=prod_id)
+        carrito.agregar(producto)
+    except Inventario.DoesNotExist:
+        pass
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def restarProducto(request, prod_id):
+    carrito = Carrito(request)
+    try:
+        producto = Inventario.objects.get(prod_id=prod_id)
+        carrito.restar(producto)
+    except Inventario.DoesNotExist:
+        pass
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def eliminarProducto(request, prod_id):
+    carrito = Carrito(request)
+    try:
+        producto = Inventario.objects.get(prod_id=prod_id)
+        carrito.eliminar(producto)
+    except Inventario.DoesNotExist:
+        pass
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def limpiarCarrito(request):
+    carrito = Carrito(request)
+    carrito.limpiar()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 """ ----------------------------------------Home de usuarios Empleados------------------------------------- """
 
