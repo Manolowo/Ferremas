@@ -117,8 +117,15 @@ body {
 }
 
 /* Estilos de los botones de arriba, abajo y eliminar al pasar el ratón */
-.btn-more:hover,
-.btn-less:hover,
+
 .btn-none:hover {
-    opacity: 0.8; /* Reducción de la opacidad al pasar el ratón */
+    background-color: #1489b8; /* Amarillo */
+}
+
+.btn-more:hover{
+    background-color:  #0bda0b; /* Verde más oscuro */
+}
+
+.btn-none:hover{
+    background-color: rgb(255, 0, 0); /* Morado más oscuro */
 }

@@ -1,0 +1,55 @@
+.about-us {
+    font-family: "Arial", sans-serif;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 40px;
+    background-color: #f4f4f4;
+  }
+  
+  .about-us-text, .about-us-map {
+    width: 45%;
+  }
+  
+  .about-us-text h2, .about-us-map h2 {
+    margin-bottom: 20px;
+  }
+  
+  .about-us-text p {
+    
+    font-size: 1.1em;
+    line-height: 1.6;
+  }
+  
+  .contacto {
+    font-family: "Arial", sans-serif;
+    padding: 40px;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.contacto h2 {
+    margin-bottom: 20px;
+}
+
+.contacto input[type="email"] {
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.contacto button {
+    padding: 10px 20px;
+    background-color: #095f01;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#response-message {
+    margin-top: 20px;
+    font-weight: bold;
+}
