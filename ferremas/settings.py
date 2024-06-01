@@ -125,3 +125,7 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYPAL_CLIENT_ID = 'AQ1Dh_jbFyYRQ970z8uJISLsT_v56VFQ-MR1D4HauIZ3sStqs-CzdpTx_bkJvPtmvLL9ilOqQhoUQ4DO'
+PAYPAL_CLIENT_SECRET = 'EDGm8fizaitdNqKAUppIp7zmlX4DITPbfRDQthsmd9O-a6VWaA3HNAARFJRrUWxFF92oCzDpmyVvh1s1'
+PAYPAL_MODE = 'sandbox'

@@ -8,8 +8,10 @@
     <title>Carrito de Compras</title>
         <!-- .css -->
         <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
-
+        <link rel="stylesheet" href="{% static '/styles/cliente/divisas.css' %}" />
         <link rel="stylesheet" href="{% static '/styles/cliente/carrito.css' %}" />
+
+        <script src="https://www.paypal.com/sdk/js?client-id=AQ1Dh_jbFyYRQ970z8uJISLsT_v56VFQ-MR1D4HauIZ3sStqs-CzdpTx_bkJvPtmvLL9ilOqQhoUQ4DO"></script>
 
 </head>
 <body>
@@ -32,7 +34,19 @@
     </header>
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
-        <h2>Carrito de Compras de {{ cliente.cli_name }} {{ cliente.cli_lastname }}, revisa tus productos antes de comprar.</h2>
+<!-- divisas -->
+<div class="divisas-bar">
+    <div class="marquee">
+        <p>Divisas en peso chileno: </p>
+        <p id="UF"></p><a>|</a>
+        <p id="DolarO"></p><a>|</a>
+        <p id="Euro"></p><a>|</a>
+        <p id="IPC"></p><a>|</a>
+        <p id="UTM"></p><a>|</a>
+        <p id="IVP"></p><a>|</a>
+        <p id="Imacec"></p>
+    </div>
+</div>
 
 <!-- Carrito de Compras -->
 <div class="container">
@@ -55,7 +69,7 @@
                 <td>{{ producto_info.cantidad }}</td>
                 <td>${{ producto_info.subtotal }}</td>
                 <td class="actions-column">
-                    <!-- Agrega aquí enlaces para restar o eliminar productos -->
+                    <!-- Enlaces para restar o eliminar productos -->
                     <div class="acciones">
                     <button type="button" class="btn btn-more" onclick="location.href='{% url 'Add' producto_id %}'">+</button>
                     <button type="button" class="btn btn-less" onclick="location.href='{% url 'Sub' producto_id %}'">-</button>
@@ -71,7 +85,7 @@
             {% endfor %}
             <tr>
                 <td colspan="3" class="text-end">Total:</td>
-                <td colspan="2">${{ totalCarrito }}</td>
+                <td colspan="2" id="totalCarrito" data-total="{{ totalCarrito }}" >${{totalCarrito}}</td>
             </tr>
         </tbody>
     </table>
@@ -79,13 +93,23 @@
     <div class="btn-container">
         {% if request.session.carrito.items %}
         <button type="button" onclick="location.href='{% url 'CLS' %}'" class="btn btn-danger">Limpiar Carrito</button>
-        <button type="button" class="btn btn-success">Realizar Compra</button>
+        <!-- <button type="button" class="btn btn-success">Realizar Compra</button> -->
+        <div id="paypal-button-container"></div>
+
         {% endif %}
     </div>
 </div>
 <!-- Fin del Carrito de Compras -->
 
     </div>
+    
+
+<script src="{% static 'js/cliente/paypal.js' %}"></script>
+<script>
+    var clearCartUrl = "{% url 'CLS' %}";
+</script>
+
+<script src="{% static 'js/cliente/divisas.js' %}"></script>
 
 </body>
 </html>

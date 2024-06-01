@@ -8,7 +8,6 @@
     <title>Ferremas</title>
     <!-- .css -->
     <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
-
     <link rel="stylesheet" href="{% static '/styles/cliente/productos.css' %}" />
 
 </head>
@@ -34,6 +33,7 @@
     </header>
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
+
         <h2> Bienvenido a Ferremas, {{cliente.cli_name}} {{cliente.cli_lastname}}.</h2>
 
         <!-- Barra de búsqueda -->
@@ -65,10 +65,7 @@
         
     </div>
 
-    <footer>
-        <h2>Api conversion dinero</h2>
-    </footer>
-
     <script src="{% static 'js/cliente/filtrarProductos.js' %}"></script>
+
 </body>
 </html>

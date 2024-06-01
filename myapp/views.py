@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Cliente, Rol, Empleado, Inventario
 
+from django.conf import settings
+import paypalrestsdk
+
 from myapp.carrito import Carrito
 
 """ ----------------------------------------Home Principal------------------------------------- """
@@ -106,6 +109,9 @@ def cli_carrito(request):
     total_carrito = carrito.total_carrito()
 
     return render(request, 'cliente/cli_carrito.html', {'cliente': cliente, 'productos': productos_en_carrito, 'totalCarrito': total_carrito})
+
+"""_____________________ Paypal _____________________"""
+
 
 """_____________________ Carrito _____________________"""
 
