@@ -56,6 +56,7 @@ def login_view(request):
 
 def crear_cuenta(request):
     if request.method == 'POST':
+        cli_rut = request.POST.get('cli_rut')
         cli_name = request.POST.get('cli_name')
         cli_lastname = request.POST.get('cli_lastname')
         cli_password = request.POST.get('cli_password')
@@ -67,6 +68,7 @@ def crear_cuenta(request):
 
         # Crear el objeto Cliente y asignar el rol
         cliente = Cliente(
+            cli_rut=cli_rut,
             cli_name=cli_name,
             cli_lastname=cli_lastname,
             cli_password=cli_password,

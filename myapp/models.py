@@ -1,8 +1,11 @@
+from django.utils import timezone
 from django.db import models
 
 from django.db.models.signals import post_save
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
+import os
+
 
 # Create your models here.
 """ ----------------------------------------Roles y usuarios------------------------------------- """
@@ -16,9 +19,10 @@ class Rol(models.Model):
     
 class Cliente(models.Model):
     cli_id = models.AutoField(primary_key=True)
+    cli_rut= models.CharField(max_length=12, null=False, unique=True)
     cli_name = models.CharField(max_length=15, null=False)
     cli_lastname = models.CharField(max_length=20, null=False)
-    cli_password = models.CharField(max_length=20, null=False, default="admin")
+    cli_password = models.CharField(max_length=20, null=False)
     cli_mail = models.EmailField(null=False)
     cli_fono = models.IntegerField(null=False)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
@@ -27,9 +31,10 @@ class Cliente(models.Model):
 
 class Empleado(models.Model):
     emp_id = models.AutoField(primary_key=True)
+    emp_rut= models.CharField(max_length=12, null=False, unique=True)
     emp_name = models.CharField(max_length=15, null=False)
     emp_lastname = models.CharField(max_length=20, null=False)
-    emp_password = models.CharField(max_length=20, null=False, default="admin")
+    emp_password = models.CharField(max_length=20, null=False)
     emp_mail = models.EmailField(null=False)
     emp_fono = models.IntegerField(null=False)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
@@ -49,24 +54,32 @@ class Producto(models.Model):
     prod_nom = models.CharField(max_length=50, null=False)
     prod_marca = models.CharField(max_length=25, default='Generica')
     prod_prec= models.IntegerField(default=1, null=False)
+    prod_img = models.ImageField(upload_to='productos/', null=True, blank=True)
     prod_cant= models.IntegerField(default= 1, null=False)
     catProd_nom = models.ForeignKey(CategoriaProducto, on_delete=models.CASCADE)
+    prod_ingreso = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.prod_nom
+    
+def path_and_rename(instance, filename):
+    upload_to = 'productos/'
+    ext = filename.split('.')[-1]
+    filename = f'{instance.prod_id}.{ext}'
+    return os.path.join(upload_to, filename)
 
 class Inventario(models.Model):
     prod_id = models.AutoField(primary_key=True)
     prod_nom = models.CharField(max_length=50)
     prod_marca = models.CharField(max_length=25)
     prod_prec= models.IntegerField()
+    prod_img = models.ImageField(upload_to=path_and_rename, null=True, blank=True)
     catProd_nom = models.ForeignKey(CategoriaProducto, on_delete=models.CASCADE)
     
     inv_cantTotal = models.IntegerField(default=0)
     
     def __str__(self):
         return self.prod_nom + '-' + self.prod_marca
-    
 
 """ ---------------------------------------Gestion de inventario--------------------------------------------"""
 
@@ -79,9 +92,7 @@ def actualizar_inventario(sender, instance, created, **kwargs):
             prod_prec=instance.prod_prec,
             catProd_nom=instance.catProd_nom
         )
-        inventario.inv_cantTotal += int(instance.prod_cant)
-        inventario.save()
-        
+        inventario.prod_img = instance.prod_img 
     else:
         inventario = Inventario.objects.get(
             prod_nom=instance.prod_nom,
@@ -89,35 +100,6 @@ def actualizar_inventario(sender, instance, created, **kwargs):
             prod_prec=instance.prod_prec,
             catProd_nom=instance.catProd_nom
         )
-        inventario.inv_cantTotal += int(instance.prod_cant)
-        inventario.save()
-        
-@receiver(post_delete, sender=Producto)
-def eliminar_de_inventario(sender, instance, **kwargs):
-    try:
-        inventario = Inventario.objects.get(
-            prod_nom=instance.prod_nom,
-            prod_marca=instance.prod_marca,
-            prod_prec=instance.prod_prec,
-            catProd_nom=instance.catProd_nom
-        )
-        inventario.inv_cantTotal -= int(instance.prod_cant)
-        if inventario.inv_cantTotal <= 0:
-            inventario.delete()
-        else:
-            inventario.save()
-    except Inventario.DoesNotExist:
-        pass
-    
-@receiver(post_delete, sender=Inventario)
-def eliminar_producto(sender, instance, **kwargs):
-    try:
-        producto = Producto.objects.filter(
-            prod_nom=instance.prod_nom,
-            prod_marca=instance.prod_marca,
-            prod_prec=instance.prod_prec,
-            catProd_nom=instance.catProd_nom
-        )
-        producto.delete()
-    except Producto.DoesNotExist:
-        pass
+
+    inventario.inv_cantTotal += instance.prod_cant
+    inventario.save()

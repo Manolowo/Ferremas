@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -24,6 +23,16 @@ body {
     transition: transform 0.2s;
 }
 
+.imagen-producto {
+    text-align: center;
+}
+
+.imagen-producto img {
+    max-width: 50%;
+    max-height: 50%; 
+    object-fit: contain; 
+}
+
 .productos-card:hover {
     transform: translateY(-5px);
 }
@@ -40,7 +49,6 @@ body {
     color: rgb(255, 255, 255);
 }
 
-/* Estilos del botón */
 .btn-agregar-carrito {
     display: block;
     padding: 10px 20px;

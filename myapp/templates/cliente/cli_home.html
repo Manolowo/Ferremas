@@ -54,6 +54,13 @@
                         <h5>{{ producto.prod_nom }}</h5>
                     </div>
                     <div class="card-body">
+                        {% if producto.prod_img %}
+                            <div class="imagen-producto" style="text-align: center;">
+                                <img src="{{ producto.prod_img.url }}" alt="{{ producto.prod_nom }}">
+                            </div>
+                        {% else %}
+                            <p>No hay imagen disponible de este producto</p>
+                        {% endif %}
                         <p>Marca: {{ producto.prod_marca }}</p>
                         <p>Precio: ${{ producto.prod_prec }}</p>
                         <p>Disponibles: {{ producto.inv_cantTotal }}</p>
