@@ -1,9 +1,7 @@
-from django.shortcuts import render, redirect
+from django import forms
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Cliente, Rol, Empleado, Inventario
-
-from django.conf import settings
-import paypalrestsdk
+from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto
 
 from myapp.carrito import Carrito
 
@@ -80,7 +78,7 @@ def crear_cuenta(request):
 
         # Aquí puedes agregar lógica adicional, como iniciar sesión automáticamente
 
-        return redirect('cli_home')  # Cambia 'cli_home' por la URL a la que quieras redirigir después de crear la cuenta
+        return redirect('cli_home')
 
     return render(request, 'crear_cuenta.html')
 
@@ -95,8 +93,14 @@ def cli_home(request):
         return JsonResponse({'error': 'Cliente no encontrado'})
     
     productos= Inventario.objects.all()
+    categorias = CategoriaProducto.objects.all()
 
-    return render(request, 'cliente/cli_home.html', {'cliente': cliente , 'productos': productos})
+    categoria_filtro = request.GET.get('categoria')
+
+    if categoria_filtro:
+        productos = productos.filter(catProd_nom__catProd_nom=categoria_filtro)
+
+    return render(request, 'cliente/cli_home.html', {'cliente': cliente , 'productos': productos, 'categorias': categorias})
 
 def cli_carrito(request):
     try:
@@ -111,9 +115,6 @@ def cli_carrito(request):
     total_carrito = carrito.total_carrito()
 
     return render(request, 'cliente/cli_carrito.html', {'cliente': cliente, 'productos': productos_en_carrito, 'totalCarrito': total_carrito})
-
-"""_____________________ Paypal _____________________"""
-
 
 """_____________________ Carrito _____________________"""
 
@@ -198,3 +199,99 @@ def adm_home(request):
         return JsonResponse({'error': 'Empleado no encontrado'})
     
     return render(request, 'empleado/admin/adm_home.html', {'empleado': empleado})
+
+def adm_usuarios(request):
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    clientes = Cliente.objects.all()
+    empleados = Empleado.objects.all()
+    
+    return render(request, 'empleado/admin/adm_usuarios.html', {'empleado': empleado, 'clientes': clientes, 'empleados': empleados})
+
+def adm_inventario(request):
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    productos = Inventario.objects.all()
+    categorias = CategoriaProducto.objects.all()
+
+    categoria_filtro = request.GET.get('categoria')
+
+    if categoria_filtro:
+        productos = productos.filter(catProd_nom__catProd_nom=categoria_filtro)
+
+    return render(request, 'empleado/admin/adm_inventario.html', {'empleado': empleado, 'productos': productos, 'categorias': categorias})
+
+def eliminar_producto(request, prod_id):
+    producto = get_object_or_404(Inventario, prod_id=prod_id)
+    if request.method == 'POST':
+        producto.delete()
+        return redirect(request.META.get('HTTP_REFERER'))
+    return redirect(request.META.get('HTTP_REFERER'))
+
+class EditProductoForm(forms.ModelForm):
+    class Meta:
+        model = Inventario
+        fields = ['prod_nom', 'prod_marca', 'prod_prec', 'prod_img', 'catProd_nom', 'inv_cantTotal']
+
+def editar_producto(request, prod_id):
+    producto = get_object_or_404(Inventario, prod_id=prod_id)
+
+    if request.method == 'POST':
+        form = EditProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            return redirect('adm_inventario')  
+    else:
+        form = EditProductoForm(instance=producto)
+
+    return render(request, 'empleado/admin/ediciones/editar_producto.html', {'form': form, 'producto': producto})
+
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['prod_nom', 'prod_marca', 'prod_prec', 'prod_img', 'prod_cant', 'catProd_nom']
+        labels = {
+            'prod_nom': 'Nombre del Producto',
+            'prod_marca': 'Marca',
+            'prod_prec': 'Precio',
+            'prod_img': 'Imagen',
+            'prod_cant': 'Cantidad',
+            'catProd_nom': 'Categoría del Producto',
+        }
+        widgets = {
+            'prod_nom': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'prod_marca': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'prod_prec': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
+            'prod_img': forms.FileInput(attrs={'class': 'form-control-file'}),
+            'prod_cant': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
+            'catProd_nom': forms.Select(attrs={'class': 'form-control', 'required': True}),
+        }
+
+def adm_productos(request):
+    categorias = CategoriaProducto.objects.all()
+    productos = Producto.objects.all()
+
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('adm_productos')
+    else:
+        form = ProductoForm()
+
+    context = {
+        'form': form,
+        'productos': productos,
+        'categorias': categorias,
+    }
+    return render(request, 'empleado/admin/adm_productos.html', context)

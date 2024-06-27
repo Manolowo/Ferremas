@@ -92,14 +92,20 @@ def actualizar_inventario(sender, instance, created, **kwargs):
             prod_prec=instance.prod_prec,
             catProd_nom=instance.catProd_nom
         )
-        inventario.prod_img = instance.prod_img 
+        if instance.prod_img:
+            inventario.prod_img = instance.prod_img
     else:
-        inventario = Inventario.objects.get(
-            prod_nom=instance.prod_nom,
-            prod_marca=instance.prod_marca,
-            prod_prec=instance.prod_prec,
-            catProd_nom=instance.catProd_nom
-        )
+        try:
+            inventario = Inventario.objects.get(
+                prod_nom=instance.prod_nom,
+                prod_marca=instance.prod_marca,
+                prod_prec=instance.prod_prec,
+                catProd_nom=instance.catProd_nom
+            )
+            if not instance.prod_img:
+                instance.prod_img = inventario.prod_img
+        except Inventario.DoesNotExist:
+            pass
 
     inventario.inv_cantTotal += instance.prod_cant
     inventario.save()

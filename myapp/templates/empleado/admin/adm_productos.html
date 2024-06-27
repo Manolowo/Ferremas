@@ -1,0 +1,107 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas - Añadir Producto</title>
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="{% static 'styles/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/empleado/admin/adm_productos.css' %}">
+
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="navbar">
+                <div class="logo">
+                    <a href="/adm_home">
+                        <img src="{% static 'logo/LogoFerremas.png' %}" alt="Logo">
+                    </a>
+                </div>
+                <div class="nav-items">
+                    <ul>
+                        <li><a href="#" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                        <li><a href="/adm_inventario" id="inventario-link"><i class="fas fa-list-alt"></i> Inventario</a></li>
+                        <li><a href="#" id="facturaciones-link"><i class="fas fa-list-alt"></i> Facturaciones</a></li>
+                        <li><a href="#" id="reportes-link"><i class="fas fa-list-alt"></i> Reportes</a></li>
+                        <li><a href="/adm_usuarios" id="usuarios-link"><i class="fas fa-list-alt"></i> Usuarios</a></li>
+                        <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" style="margin-top: 100px; margin-left: 15px;">
+
+        <h2> Añadir Nuevo Producto</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.prod_nom.label_tag }}
+                {{ form.prod_nom }}
+            </div>
+            <div class="form-group">
+                {{ form.prod_marca.label_tag }}
+                {{ form.prod_marca }}
+            </div>
+            <div class="form-group">
+                {{ form.prod_prec.label_tag }}
+                {{ form.prod_prec }}
+            </div>
+            <div class="form-group">
+                {{ form.prod_img.label_tag }}
+                {{ form.prod_img }}
+            </div>
+            <div class="form-group">
+                {{ form.prod_cant.label_tag }}
+                {{ form.prod_cant }}
+            </div>
+            <div class="form-group">
+                {{ form.catProd_nom.label_tag }}
+                {{ form.catProd_nom }}
+            </div>
+            <button type="submit" class="btn btn-primary">Agregar Producto</button>
+        </form>
+
+        <br>
+
+        <!-- Tabla de productos -->
+        <div class="tabla-productos">
+            <h3>Historial de ingreso de productos</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Marca</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Categoría</th>
+                        <th>Fecha de Ingreso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr>
+                        <td>{{ producto.prod_id }}</td>
+                        <td>{{ producto.prod_nom }}</td>
+                        <td>{{ producto.prod_marca }}</td>
+                        <td>${{ producto.prod_prec }}</td>
+                        <td>{{ producto.prod_cant }}</td>
+                        <td>{{ producto.catProd_nom }}</td>
+                        <td>{{ producto.prod_ingreso }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

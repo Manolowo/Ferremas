@@ -17,15 +17,18 @@
         <nav>
             <div class="navbar">
             <div class="logo">
-                <a href="/cli_home">
+                <a href="/adm_home">
                 <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
                 </a>
             </div>
             <div class="nav-items">
                 <ul>
-                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
-                <li><a href="/cli_carrito" id="carrito-link"><i class="fas fa-shopping-cart"></i> Mi Carrito</a></li>
-                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                    <li><a href="#" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                    <li><a href="#" id="productos-link"><i class="fas fa-list-alt"></i> Productos</a></li>
+                    <li><a href="#" id="facturaciones-link"><i class="fas fa-list-alt"></i> Facturaciones</a></li>
+                    <li><a href="#" id="reportes-link"><i class="fas fa-list-alt"></i> Reportes</a></li>
+                    <li><a href="/adm_usuarios" id="usuarios-link"><i class="fas fa-list-alt"></i> Usuarios</a></li>
+                    <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                 </ul>
             </div>
             </div>
@@ -34,8 +37,8 @@
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
 
-        <h2> Bienvenido a Ferremas, {{cliente.cli_name}} {{cliente.cli_lastname}}.</h2>
-
+        <h2> Bienvenido a Ferremas, {{empleado.emp_name}} {{empleado.emp_lastname}}.</h2>
+        
         <!-- Barra de búsqueda -->
         
         <div class="search-bar">
@@ -77,8 +80,17 @@
                         <p>Categoría: {{ producto.catProd_nom }}</p>
                         <p>Precio: ${{ producto.prod_prec }}</p>
                         <p>Disponibles: {{ producto.inv_cantTotal }}</p>
+                        <div class="acciones-producto">
+                            <p>
+                                <a href="{% url 'editar_producto' producto.prod_id %}" class="editar-producto">Editar</a>
+                            </p>
+                            <br>
+                            <form method="post" action="{% url 'eliminar_producto' producto.prod_id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="eliminar-producto">Eliminar</button>
+                            </form>
+                        </div>
                     </div>
-                    <a href="{% url 'Add' producto.prod_id %}" class="btn-agregar-carrito">Agregar al Carrito</a>
                 </div>
             {% endfor %}
         </div>

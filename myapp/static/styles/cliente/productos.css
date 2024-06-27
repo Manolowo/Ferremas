@@ -87,15 +87,86 @@ body {
 
 .search-input-container input:focus {
     border-color:rgb(82, 2, 82);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra al enfocar */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .search-bar {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centrar horizontalmente */
+    align-items: center;
 }
 
 .search-text {
-    margin-top: 10px; /* Espacio entre el texto y el input */
+    margin-top: 10px; 
+}
+
+.acciones-producto {
+    display: block;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+}
+
+.editar-producto {
+    background-color: #c0b413; 
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    margin-bottom: 10px; 
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+
+    text-align: center;
+}
+
+.editar-producto:hover {
+    background-color: #ebcb1b;
+}
+
+.eliminar-producto {
+    background-color: #9e0b00;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+
+}
+
+.eliminar-producto:hover {
+    background-color: #ff2320;
+}
+
+.filtro-categoria {
+    text-align: center; 
+}
+
+.filtro-categoria form {
+    display: inline-block;
+}
+
+.filtro-categoria label {
+    margin-right: 10px; 
+    color: #000000; 
+    font-size: 14px;
+}
+
+.filtro-categoria select {
+    padding: 6px; /* Espaciado interno más pequeño */
+    border-radius: 4px; /* Bordes redondeados */
+    border: 1px solid #ccc; /* Borde */
+    background-color: #ffffff; /* Color de fondo */
+    color: #333333; /* Color del texto */
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+    outline: none; /* Sin borde de enfoque */
+    transition: all 0.3s ease; /* Transición suave */
+}
+
+.filtro-categoria select:focus {
+    border-color: rgb(82, 2, 82); /* Color del borde al estar enfocado */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* Sombra al estar enfocado */
 }

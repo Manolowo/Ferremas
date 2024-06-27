@@ -9,12 +9,11 @@ urlpatterns = [
     
     path('cli_home/', views.cli_home, name='cli_home'),
     path('cli_carrito/', views.cli_carrito, name='cli_carrito'),
-    
     path('agregar/<int:prod_id>/', agregarProducto, name="Add"),
     path('restar/<int:prod_id>/', restarProducto, name="Sub"),
     path('eliminar/<int:prod_id>/', eliminarProducto, name="Del"),
     path('limpiar/', limpiarCarrito, name="CLS"),
-        
+    
     path('ven_home/', views.ven_home, name='ven_home'),
     
     path('bod_home/', views.bod_home, name='bod_home'),
@@ -22,4 +21,12 @@ urlpatterns = [
     path('con_home/', views.con_home, name='con_home'),
     
     path('adm_home/', views.adm_home, name='adm_home'),
+    
+    path('adm_usuarios/', views.adm_usuarios, name='adm_usuarios'),
+    
+    path('adm_inventario/', views.adm_inventario, name='adm_inventario'),
+    path('eliminar_producto/<int:prod_id>/', views.eliminar_producto, name='eliminar_producto'),
+    path('editar_producto/<int:prod_id>/', views.editar_producto, name='editar_producto'),
+    path('adm_productos/', views.adm_productos, name='adm_productos'),
+    
 ]
