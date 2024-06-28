@@ -109,3 +109,4 @@ def actualizar_inventario(sender, instance, created, **kwargs):
 
     inventario.inv_cantTotal += instance.prod_cant
     inventario.save()
+    

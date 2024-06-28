@@ -73,3 +73,26 @@ class EditEmpleadoForm(forms.ModelForm):
             'rol': forms.Select(attrs={'class': 'form-control'}),
         }
 
+class EmpleadoForm(forms.ModelForm):
+    class Meta:
+        model = Empleado
+        fields = ['emp_rut', 'emp_name', 'emp_lastname', 'emp_password', 'emp_mail', 'emp_fono', 'rol']
+        labels = {
+            'emp_rut': 'Rut del empleado',
+            'emp_name': 'Nombre del empleado',
+            'emp_lastname': 'Apellido del empleado',
+            'emp_password': 'Contraseña',
+            'emp_mail': 'Correo del empleado',
+            'emp_fono': 'Fono del Empleado',
+            'rol': 'Rol del empleado',
+        }
+        widgets = {
+            'emp_rut': forms.TextInput(attrs={'class': 'form-control'}),
+            'emp_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'emp_lastname': forms.TextInput(attrs={'class': 'form-control'}),
+            'emp_password': forms.PasswordInput(attrs={'class': 'form-control'}),
+            'emp_mail': forms.EmailInput(attrs={'class': 'form-control'}),
+            'emp_fono': forms.NumberInput(attrs={'class': 'form-control'}),
+            'rol': forms.Select(attrs={'class': 'form-control'}),
+        }
+

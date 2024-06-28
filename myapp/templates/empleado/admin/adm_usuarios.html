@@ -9,6 +9,7 @@
     <!-- .css -->
     <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
     <link rel="stylesheet" href="{% static '/styles/empleado/admin/adm_usuarios.css' %}" />
+    <link rel="stylesheet" href="{% static '/styles/empleado/admin/form.css' %}" />
 
 </head>
 <body>
@@ -85,6 +86,44 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <div>
+        <h2> Añadir Nuevo Empleado</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.emp_rut.label_tag }}
+                {{ form.emp_rut }}
+            </div>
+            <div class="form-group">
+                {{ form.emp_name.label_tag }}
+                {{ form.emp_name }}
+            </div>
+            <div class="form-group">
+                {{ form.emp_lastname.label_tag }}
+                {{ form.emp_lastname }}
+            </div>
+            <div class="form-group">
+                {{ form.emp_password.label_tag }}
+                {{ form.emp_password }}
+            </div>
+            <div class="form-group">
+                {{ form.emp_mail.label_tag }}
+                {{ form.emp_mail }}
+            </div>
+            <div class="form-group">
+                {{ form.emp_fono.label_tag }}
+                {{ form.emp_fono }}
+            </div>
+            <div class="form-group">
+                {{ form.rol.label_tag }}
+                {{ form.rol }}
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Agregar Empleado</button>
+        </form>
+        </div>
 
     </div>
 

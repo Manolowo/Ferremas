@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto
 
 from myapp.carrito import Carrito
-from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm
+from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm
 
 """ ----------------------------------------Home Principal------------------------------------- """
 
@@ -211,8 +211,17 @@ def adm_usuarios(request):
     
     clientes = Cliente.objects.all()
     empleados = Empleado.objects.all()
-    
-    return render(request, 'empleado/admin/adm_usuarios.html', {'empleado': empleado, 'clientes': clientes, 'empleados': empleados})
+
+    if request.method == 'POST':
+        form = EmpleadoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Empleado añadido correctamente.')
+            return redirect('adm_usuarios')
+    else:
+        form = EmpleadoForm()
+
+    return render(request, 'empleado/admin/adm_usuarios.html', {'empleado': empleado, 'clientes': clientes, 'empleados': empleados, 'form': form})
 
 def eliminar_cliente(request, cliente_id):
     cliente = get_object_or_404(Cliente, cli_id=cliente_id)
