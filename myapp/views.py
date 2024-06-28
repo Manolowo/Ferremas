@@ -1,9 +1,10 @@
-from django import forms
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto
 
 from myapp.carrito import Carrito
+from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm
 
 """ ----------------------------------------Home Principal------------------------------------- """
 
@@ -213,6 +214,56 @@ def adm_usuarios(request):
     
     return render(request, 'empleado/admin/adm_usuarios.html', {'empleado': empleado, 'clientes': clientes, 'empleados': empleados})
 
+def eliminar_cliente(request, cliente_id):
+    cliente = get_object_or_404(Cliente, cli_id=cliente_id)
+    cliente.delete()
+    messages.success(request, 'Cliente eliminado correctamente.')
+    return redirect('adm_usuarios')
+
+def eliminar_empleado(request, empleado_id):
+    empleado = get_object_or_404(Empleado, emp_id=empleado_id)
+    empleado.delete()
+    messages.success(request, 'Empleado eliminado correctamente.')
+    return redirect('adm_usuarios')
+
+def editar_cliente(request, cliente_id):
+    cliente = get_object_or_404(Cliente, cli_id=cliente_id)
+    form_class = EditClienteForm
+    
+    if request.method == 'POST':
+        form = form_class(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cliente actualizado correctamente.')
+            return redirect('adm_usuarios')
+    else:
+        form = form_class(instance=cliente)
+
+    context = {
+        'form': form,
+        'usuario': cliente,
+    }
+    return render(request, 'empleado/admin/ediciones/editar_usuario.html', context)
+
+def editar_empleado(request, empleado_id):
+    empleado = get_object_or_404(Empleado, emp_id=empleado_id)
+    form_class = EditEmpleadoForm
+    
+    if request.method == 'POST':
+        form = form_class(request.POST, instance=empleado)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Empleado actualizado correctamente.')
+            return redirect('adm_usuarios')
+    else:
+        form = form_class(instance=empleado)
+
+    context = {
+        'form': form,
+        'usuario': empleado,
+    }
+    return render(request, 'empleado/admin/ediciones/editar_usuario.html', context)
+
 def adm_inventario(request):
     try:
         empleado = Empleado.objects.get(emp_id=request.session['user_id'])
@@ -235,13 +286,9 @@ def eliminar_producto(request, prod_id):
     producto = get_object_or_404(Inventario, prod_id=prod_id)
     if request.method == 'POST':
         producto.delete()
+        messages.success(request, 'Producto eliminado correctamente.')
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
-
-class EditProductoForm(forms.ModelForm):
-    class Meta:
-        model = Inventario
-        fields = ['prod_nom', 'prod_marca', 'prod_prec', 'prod_img', 'catProd_nom', 'inv_cantTotal']
 
 def editar_producto(request, prod_id):
     producto = get_object_or_404(Inventario, prod_id=prod_id)
@@ -250,32 +297,12 @@ def editar_producto(request, prod_id):
         form = EditProductoForm(request.POST, request.FILES, instance=producto)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Producto editado correctamente.')
             return redirect('adm_inventario')  
     else:
         form = EditProductoForm(instance=producto)
 
     return render(request, 'empleado/admin/ediciones/editar_producto.html', {'form': form, 'producto': producto})
-
-class ProductoForm(forms.ModelForm):
-    class Meta:
-        model = Producto
-        fields = ['prod_nom', 'prod_marca', 'prod_prec', 'prod_img', 'prod_cant', 'catProd_nom']
-        labels = {
-            'prod_nom': 'Nombre del Producto',
-            'prod_marca': 'Marca',
-            'prod_prec': 'Precio',
-            'prod_img': 'Imagen',
-            'prod_cant': 'Cantidad',
-            'catProd_nom': 'Categoría del Producto',
-        }
-        widgets = {
-            'prod_nom': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
-            'prod_marca': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
-            'prod_prec': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
-            'prod_img': forms.FileInput(attrs={'class': 'form-control-file'}),
-            'prod_cant': forms.NumberInput(attrs={'class': 'form-control', 'required': True}),
-            'catProd_nom': forms.Select(attrs={'class': 'form-control', 'required': True}),
-        }
 
 def adm_productos(request):
     categorias = CategoriaProducto.objects.all()
@@ -285,6 +312,7 @@ def adm_productos(request):
         form = ProductoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Producto añadido correctamente.')
             return redirect('adm_productos')
     else:
         form = ProductoForm()

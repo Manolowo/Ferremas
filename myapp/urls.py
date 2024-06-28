@@ -23,6 +23,11 @@ urlpatterns = [
     path('adm_home/', views.adm_home, name='adm_home'),
     
     path('adm_usuarios/', views.adm_usuarios, name='adm_usuarios'),
+    path('eliminar_cliente/<int:cliente_id>/', views.eliminar_cliente, name='eliminar_cliente'),
+    path('eliminar_empleado/<int:empleado_id>/', views.eliminar_empleado, name='eliminar_empleado'),
+    
+    path('editar_cliente/<int:cliente_id>/', views.editar_cliente, name='editar_cliente'),
+    path('editar_empleado/<int:empleado_id>/', views.editar_empleado, name='editar_empleado'),
     
     path('adm_inventario/', views.adm_inventario, name='adm_inventario'),
     path('eliminar_producto/<int:prod_id>/', views.eliminar_producto, name='eliminar_producto'),

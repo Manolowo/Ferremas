@@ -36,9 +36,9 @@
     </header>
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
-        
+
         <h2>Lista de usuarios del sistema:</h2>
-        
+
         <table class="user-table">
             <thead>
                 <tr>
@@ -49,6 +49,7 @@
                     <th>Teléfono</th>
                     <th>ID</th>
                     <th>Rol</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,6 +62,10 @@
                         <td>{{ cliente.cli_fono }}</td>
                         <td>{{ cliente.cli_id }}</td>
                         <td>{{ cliente.rol }}</td>
+                        <td>
+                            <a href="{% url 'editar_cliente' cliente.cli_id %}">Editar</a>
+                            <a href="{% url 'eliminar_cliente' cliente.cli_id %}">Eliminar</a>
+                        </td>
                     </tr>
                 {% endfor %}
                 {% for emp in empleados %}
@@ -72,6 +77,10 @@
                         <td>{{ emp.emp_fono }}</td>
                         <td>{{ emp.emp_id }}</td>
                         <td>Empleado - {{ emp.rol }}</td>
+                        <td>
+                            <a href="{% url 'editar_empleado' emp.emp_id %}">Editar</a>
+                            <a href="{% url 'eliminar_empleado' emp.emp_id %}">Eliminar</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

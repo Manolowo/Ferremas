@@ -1,29 +1,51 @@
-/* Estilos generales */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-}
-.container {
-    margin-left: 15px; /* Espacio a la izquierda */
-    margin-right: 15px; /* Espacio a la derecha */
-}
-.table {
-    width: calc(100% - 30px); /* Ancho igual al 100% del contenedor con un margen de 15px a cada lado */
-    border: 2px solid rgb(82, 2, 82);
-    border-radius: 5px;
-    padding: 3px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
-}
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
-th {
     background-color: #f2f2f2;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #520052;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.user-table th,
+.user-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
     text-align: left;
 }
-tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+.user-table th {
+    background-color: #520052;
+    color: #fff;
+}
+
+.user-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.user-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.user-table td.actions {
+    white-space: nowrap;
+}
+
+.user-table td.actions a {
+    color: #620062;
+    margin-right: 8px;
+    text-decoration: none;
+}
+
+.user-table td.actions a:hover {
+    color: #4a004a;
 }
