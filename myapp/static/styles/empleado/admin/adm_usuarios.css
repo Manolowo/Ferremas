@@ -40,12 +40,23 @@ h2 {
     white-space: nowrap;
 }
 
-.user-table td.actions a {
-    color: #620062;
-    margin-right: 8px;
+.user-table a {
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 2px;
+    color: #fff;
+    background-color: #620062;
+    border: none;
+    border-radius: 5px;
     text-decoration: none;
+    font-weight: bold;
+    text-align: center;
 }
 
-.user-table td.actions a:hover {
-    color: #4a004a;
+.user-table a:hover {
+    background-color: #4a004a;
+}
+
+.user-table a:active {
+    background-color: #320032;
 }
