@@ -79,7 +79,7 @@ def crear_cuenta(request):
 
         # Aquí puedes agregar lógica adicional, como iniciar sesión automáticamente
 
-        return redirect('cli_home')
+        return redirect('home')
 
     return render(request, 'crear_cuenta.html')
 
