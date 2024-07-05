@@ -86,6 +86,9 @@ def crear_cuenta(request):
 """ ----------------------------------------Home de Clientes------------------------------------- """
 
 def cli_home(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         cliente = Cliente.objects.get(cli_id=request.session['user_id'])
         print("Cliente ID from session:", request.session.get('user_id'))
@@ -156,6 +159,9 @@ def limpiarCarrito(request):
 """ ----------------------------------------Vendedores------------------------------------- """
 
 def ven_home(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         empleado = Empleado.objects.get(emp_id=request.session['user_id'])
         print("Empleado ID from session:", request.session.get('user_id'))
@@ -168,6 +174,9 @@ def ven_home(request):
 """ ----------------------------------------Bodegueros------------------------------------- """
 
 def bod_home(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         empleado = Empleado.objects.get(emp_id=request.session['user_id'])
         print("Empleado ID from session:", request.session.get('user_id'))
@@ -180,6 +189,9 @@ def bod_home(request):
 """ ----------------------------------------Contadores------------------------------------- """
 
 def con_home(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         empleado = Empleado.objects.get(emp_id=request.session['user_id'])
         print("Empleado ID from session:", request.session.get('user_id'))
@@ -192,13 +204,16 @@ def con_home(request):
 """ ----------------------------------------Admins------------------------------------- """
 
 def adm_home(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
-        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
-        print("Empleado ID from session:", request.session.get('user_id'))
+        empleado = Empleado.objects.get(emp_id=user_id)
+        print("Empleado ID from session:", user_id)
         print("Empleado Profile for current user:", empleado)
     except Empleado.DoesNotExist:
         return JsonResponse({'error': 'Empleado no encontrado'})
-    
+
     return render(request, 'empleado/admin/adm_home.html', {'empleado': empleado})
 
 def adm_usuarios(request):
