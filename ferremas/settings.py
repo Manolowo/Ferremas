@@ -124,6 +124,7 @@ STATICFILES_DIRS = [
 MEDIA_URL= '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+os.environ["PATH"] += os.pathsep + r"C:\msys64\mingw64\bin"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

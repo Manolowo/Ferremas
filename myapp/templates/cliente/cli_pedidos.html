@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas</title>
+    <!-- .css -->
+    <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+    <link rel="stylesheet" href="{% static '/styles/cliente/cli_pedidos.css' %}" />
+
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="navbar">
+            <div class="logo">
+                <a href="/cli_home">
+                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                </a>
+            </div>
+            <div class="nav-items">
+                <ul>
+                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                <li><a href="/cli_carrito" id="carrito-link"><i class="fas fa-shopping-cart"></i> Mi Carrito</a></li>
+                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
+
+        <h2> Historial de sus Pedidos</h2>
+    
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.ped_id }}</td>
+                        <td>{{ pedido.cliente.cli_name }} {{ pedido.cliente.cli_lastname }}</td>
+                        <td>{{ pedido.fecha }}</td>
+                        <td>${{ pedido.total }}</td>
+                        <td>{{ pedido.estado }}</td>
+                        <td class="acciones-column">
+                            <a href="{% url 'generar_factura' pedido.ped_id %}" class="btn btn-download" target="_blank">Descargar Factura</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="items">
+                            <strong>Items:</strong>
+                            <ul>
+                                {% for item in pedido.items.all %}
+                                <li>{{ item.producto.prod_nom }} - Cantidad: {{ item.cantidad }} - Precio Unitario: ${{ item.precio }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No hay pedidos registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

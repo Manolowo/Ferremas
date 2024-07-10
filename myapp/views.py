@@ -156,6 +156,22 @@ def registrarPedido(request):
     
     return render(request, 'cliente/registrarPedido.html', {'pedido': pedido})
 
+def cli_pedidos(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        cliente = Cliente.objects.get(cli_id=request.session['user_id'])
+        print("Cliente ID from session:", request.session.get('user_id'))
+        print("Cliente Profile for current user:", cliente)
+    except Cliente.DoesNotExist:
+        return JsonResponse({'error': 'Cliente no encontrado'})
+
+    # Obtener todos los pedidos del cliente y sus items asociados
+    pedidos = Pedido.objects.filter(cliente=cliente.cli_id)
+
+    return render(request, 'cliente/cli_pedidos.html', {'cliente': cliente, 'pedidos': pedidos})
+
 """_____________________ Carrito _____________________"""
 
 def agregarProducto(request, prod_id):

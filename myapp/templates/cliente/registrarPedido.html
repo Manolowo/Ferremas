@@ -8,8 +8,7 @@
     <title>Carrito de Compras</title>
         <!-- .css -->
         <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
-        <link rel="stylesheet" href="{% static '/styles/divisas.css' %}" />
-        <link rel="stylesheet" href="{% static '/styles/cliente/carrito.css' %}" />
+        <link rel="stylesheet" href="{% static '/styles/cliente/registrarPedido.css' %}" />
 
 </head>
 <body>
@@ -24,6 +23,7 @@
             <div class="nav-items">
                 <ul>
                 <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                <li><a href="/cli_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
                 <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                 </ul>
             </div>
@@ -47,6 +47,7 @@
         </ul>
 
         <a href="/cli_home">Volver a la tienda</a>
+        <a href="{% url 'generar_factura' pedido.ped_id %}" class="button" target="_blank">Generar Factura</a>
 
     </div>
 
