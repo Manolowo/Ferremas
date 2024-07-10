@@ -9,6 +9,7 @@ urlpatterns = [
     
     path('cli_home/', views.cli_home, name='cli_home'),
     path('cli_carrito/', views.cli_carrito, name='cli_carrito'),
+    path('registrarPedido/', views.registrarPedido, name='registrarPedido'),
     path('agregar/<int:prod_id>/', agregarProducto, name="Add"),
     path('restar/<int:prod_id>/', restarProducto, name="Sub"),
     path('eliminar/<int:prod_id>/', eliminarProducto, name="Del"),
@@ -25,13 +26,12 @@ urlpatterns = [
     path('adm_usuarios/', views.adm_usuarios, name='adm_usuarios'),
     path('eliminar_cliente/<int:cliente_id>/', views.eliminar_cliente, name='eliminar_cliente'),
     path('eliminar_empleado/<int:empleado_id>/', views.eliminar_empleado, name='eliminar_empleado'),
-    
     path('editar_cliente/<int:cliente_id>/', views.editar_cliente, name='editar_cliente'),
     path('editar_empleado/<int:empleado_id>/', views.editar_empleado, name='editar_empleado'),
-    
     path('adm_inventario/', views.adm_inventario, name='adm_inventario'),
     path('eliminar_producto/<int:prod_id>/', views.eliminar_producto, name='eliminar_producto'),
     path('editar_producto/<int:prod_id>/', views.editar_producto, name='editar_producto'),
     path('adm_productos/', views.adm_productos, name='adm_productos'),
+    path('adm_pedidos/', views.adm_pedidos, name='adm_pedidos'),
     
 ]

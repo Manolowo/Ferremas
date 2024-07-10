@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+        <!-- .css -->
+        <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+        <link rel="stylesheet" href="{% static '/styles/divisas.css' %}" />
+        <link rel="stylesheet" href="{% static '/styles/cliente/carrito.css' %}" />
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="navbar">
+            <div class="logo">
+                <a href="/cli_home">
+                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                </a>
+            </div>
+            <div class="nav-items">
+                <ul>
+                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
+        <h1>¡Gracias por tu compra!</h1>
+        <p>Tu pedido ha sido registrado con éxito.</p>
+        <h2>Detalles del Pedido</h2>
+        <p>ID del Pedido: {{ pedido.id }}</p>
+        <p>Fecha: {{ pedido.fecha }}</p>
+        <p>Total: ${{ pedido.total }}</p>
+    
+        <h3>Items del Pedido</h3>
+        <ul>
+            {% for item in pedido.items.all %}
+            <li>{{ item.cantidad }} x {{ item.producto.prod_nom }} - ${{ item.precio }}</li>
+            {% endfor %}
+        </ul>
+
+        <a href="/cli_home">Volver a la tienda</a>
+
+    </div>
+
+
+</body>
+</html>

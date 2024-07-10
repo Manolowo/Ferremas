@@ -22,7 +22,6 @@
             </div>
             <div class="nav-items">
                 <ul>
-                    <li><a href="/adm_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
                     <li><a href="/adm_productos" id="productos-link"><i class="fas fa-list-alt"></i> Productos</a></li>
                     <li><a href="/adm_inventario" id="inventario-link"><i class="fas fa-list-alt"></i> Inventario</a></li>
                     <li><a href="#" id="facturaciones-link"><i class="fas fa-list-alt"></i> Facturaciones</a></li>
@@ -37,9 +36,44 @@
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
 
-        <h2> Bienvenido a Ferremas, {{empleado.emp_name}} {{empleado.emp_lastname}}.</h2>
-        
-        
+        <h2> Administrar Pedidos</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{ pedido.ped_id }}</td>
+                <td>{{ pedido.cliente.cli_name }} {{ pedido.cliente.cli_lastname }}</td>
+                <td>{{ pedido.fecha }}</td>
+                <td>${{ pedido.total }}</td>
+                <td>{{ pedido.estado }}</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="items">
+                    <strong>Items:</strong>
+                    <ul>
+                        {% for item in pedido.items.all %}
+                        <li>{{ item.producto.prod_nom }} - Cantidad: {{ item.cantidad }} - Precio Unitario: ${{ item.precio }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No hay pedidos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
         
     </div>
 

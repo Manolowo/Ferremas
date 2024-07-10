@@ -110,3 +110,32 @@ def actualizar_inventario(sender, instance, created, **kwargs):
     inventario.inv_cantTotal += instance.prod_cant
     inventario.save()
     
+""" ----------------------------------------Pedidos------------------------------------- """
+
+class Pedido(models.Model):
+    ESTADO_CHOICES = [
+        ('Solicitado', 'Solicitado'),
+        ('En Proceso', 'En Proceso'),
+        ('Listo para retiro', 'Listo para retiro'),
+        ('Enviado', 'Enviado'),
+        ('Completado', 'Completado'),
+        ('Cancelado', 'Cancelado'),
+    ]
+    
+    ped_id = models.AutoField(primary_key=True)
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    fecha = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Solicitado')
+    
+    def __str__(self):
+        return f"{self.ped_id} - {self.cliente.cli_name} {self.cliente.cli_lastname} / {self.estado}"
+
+class PedidoItem(models.Model):
+    pedido = models.ForeignKey(Pedido, related_name='items', on_delete=models.CASCADE)
+    producto = models.ForeignKey(Inventario, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.pedido.ped_id} - {self.producto.prod_nom} - {self.cantidad}"

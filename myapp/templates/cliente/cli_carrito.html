@@ -6,110 +6,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
-        <!-- .css -->
-        <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
-        <link rel="stylesheet" href="{% static '/styles/divisas.css' %}" />
-        <link rel="stylesheet" href="{% static '/styles/cliente/carrito.css' %}" />
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="{% static 'styles/nav.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/divisas.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/cliente/carrito.css' %}" />
 
-        <script src="https://www.paypal.com/sdk/js?client-id=AQ1Dh_jbFyYRQ970z8uJISLsT_v56VFQ-MR1D4HauIZ3sStqs-CzdpTx_bkJvPtmvLL9ilOqQhoUQ4DO"></script>
-
+    <!-- Script de PayPal -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AQ1Dh_jbFyYRQ970z8uJISLsT_v56VFQ-MR1D4HauIZ3sStqs-CzdpTx_bkJvPtmvLL9ilOqQhoUQ4DO"></script>
 </head>
 <body>
     <header>
         <nav>
             <div class="navbar">
-            <div class="logo">
-                <a href="/cli_home">
-                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
-                </a>
-            </div>
-            <div class="nav-items">
-                <ul>
-                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
-                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
-                </ul>
-            </div>
+                <div class="logo">
+                    <a href="/cli_home">
+                        <img src="{% static 'logo/LogoFerremas.png' %}" alt="Logo" />
+                    </a>
+                </div>
+                <div class="nav-items">
+                    <ul>
+                        <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                        <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
-<!-- divisas -->
-<div class="divisas-bar">
-    <div class="marquee">
-        <p>Divisas en peso chileno: </p>
-        <p id="UF"></p><a>|</a>
-        <p id="DolarO"></p><a>|</a>
-        <p id="Euro"></p><a>|</a>
-        <p id="IPC"></p><a>|</a>
-        <p id="UTM"></p><a>|</a>
-        <p id="IVP"></p><a>|</a>
-        <p id="Imacec"></p>
+        <!-- Barra de Divisas -->
+        <div class="divisas-bar">
+            <div class="marquee">
+                <p>Divisas en peso chileno: </p>
+                <p id="UF"></p><a>|</a>
+                <p id="DolarO"></p><a>|</a>
+                <p id="Euro"></p><a>|</a>
+                <p id="IPC"></p><a>|</a>
+                <p id="UTM"></p><a>|</a>
+                <p id="IVP"></p><a>|</a>
+                <p id="Imacec"></p>
+            </div>
+        </div>
+
+        <!-- Carrito de Compras -->
+        <div class="container">
+            <h2>CARRITO DE COMPRAS</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Producto</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Subtotal</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto_id, producto_info in request.session.carrito.items %}
+                    <tr>
+                        <td>{{ producto_info.nombre }}</td>
+                        <td>${{ producto_info.precio }}</td>
+                        <td>{{ producto_info.cantidad }}</td>
+                        <td>${{ producto_info.subtotal }}</td>
+                        <td class="actions-column">
+                            <div class="acciones">
+                                <!-- Enlaces para sumar, restar o eliminar productos -->
+                                <button type="button" class="btn btn-more" onclick="location.href='{% url 'Add' producto_id %}'">+</button>
+                                <button type="button" class="btn btn-less" onclick="location.href='{% url 'Sub' producto_id %}'">-</button>
+                                <button type="button" class="btn btn-none" onclick="location.href='{% url 'Del' producto_id %}'">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No hay productos en el carrito.</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3" class="text-end">Total:</td>
+                        <td colspan="2" id="totalCarrito" data-total="{{ totalCarrito }}">${{ totalCarrito }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+            <div class="btn-container">
+                {% if request.session.carrito.items %}
+                    <button type="button" onclick="location.href='{% url 'CLS' %}'" class="btn btn-danger">Limpiar Carrito</button>
+                    <div id="paypal-button-container"></div>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Fin del Carrito de Compras -->
     </div>
-</div>
 
-<!-- Carrito de Compras -->
-<div class="container">
-    <h2>CARRITO DE COMPRAS</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Producto</th>
-                <th scope="col">Precio</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Subtotal</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for producto_id, producto_info in request.session.carrito.items %}
-            <tr>
-                <td>{{ producto_info.nombre }}</td>
-                <td>${{ producto_info.precio }}</td>
-                <td>{{ producto_info.cantidad }}</td>
-                <td>${{ producto_info.subtotal }}</td>
-                <td class="actions-column">
-                    <!-- Enlaces para restar o eliminar productos -->
-                    <div class="acciones">
-                    <button type="button" class="btn btn-more" onclick="location.href='{% url 'Add' producto_id %}'">+</button>
-                    <button type="button" class="btn btn-less" onclick="location.href='{% url 'Sub' producto_id %}'">-</button>
-                    <button type="button" class="btn btn-none" onclick="location.href='{% url 'Del' producto_id %}'">Eliminar</button>
-                    </div>
-
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="3">No hay productos en el carrito.</td>
-            </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="3" class="text-end">Total:</td>
-                <td colspan="2" id="totalCarrito" data-total="{{ totalCarrito }}" >${{totalCarrito}}</td>
-            </tr>
-        </tbody>
-    </table>
-    <br>
-    <div class="btn-container">
-        {% if request.session.carrito.items %}
-        <button type="button" onclick="location.href='{% url 'CLS' %}'" class="btn btn-danger">Limpiar Carrito</button>
-        <!-- <button type="button" class="btn btn-success">Realizar Compra</button> -->
-        <div id="paypal-button-container"></div>
-
-        {% endif %}
-    </div>
-</div>
-<!-- Fin del Carrito de Compras -->
-
-    </div>
-    
-
-<script src="{% static 'js/cliente/paypal.js' %}"></script>
-<script>
-    var clearCartUrl = "{% url 'CLS' %}";
-</script>
-
-<script src="{% static 'js/divisas.js' %}"></script>
+    <!-- Script Personalizado para PayPal y Divisas -->
+    <script src="{% static 'js/cliente/paypal.js' %}"></script>
+    <script>
+        var clearCartUrl = "{% url 'CLS' %}";
+    </script>
+    <script src="{% static 'js/divisas.js' %}"></script>
 
 </body>
 </html>

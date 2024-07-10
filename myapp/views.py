@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto
+from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto, Pedido, PedidoItem
 
 from myapp.carrito import Carrito
 from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm
@@ -107,6 +107,9 @@ def cli_home(request):
     return render(request, 'cliente/cli_home.html', {'cliente': cliente , 'productos': productos, 'categorias': categorias})
 
 def cli_carrito(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         cliente = Cliente.objects.get(cli_id=request.session['user_id'])
         print("Cliente ID from session:", request.session.get('user_id'))
@@ -119,6 +122,39 @@ def cli_carrito(request):
     total_carrito = carrito.total_carrito()
 
     return render(request, 'cliente/cli_carrito.html', {'cliente': cliente, 'productos': productos_en_carrito, 'totalCarrito': total_carrito})
+
+def registrarPedido(request):
+    carrito = Carrito(request)
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')
+    
+    try:
+        cliente = Cliente.objects.get(cli_id=user_id)
+    except Cliente.DoesNotExist:
+        return JsonResponse({'error': 'Cliente no encontrado'})
+    
+    total = carrito.total_carrito()
+    
+    if not carrito.carrito:
+        return redirect('cli_carrito')
+    
+    # Crear el pedido
+    pedido = Pedido.objects.create(cliente=cliente, total=total)
+    
+    # Crear los items del pedido
+    for item in carrito.carrito.values():
+        producto = Inventario.objects.get(prod_id=item['id_prod'])
+        PedidoItem.objects.create(
+            pedido=pedido,
+            producto=producto,
+            cantidad=item['cantidad'],
+            precio=item['precio']
+        )
+    
+    carrito.limpiar()
+    
+    return render(request, 'cliente/registrarPedido.html', {'pedido': pedido})
 
 """_____________________ Carrito _____________________"""
 
@@ -217,6 +253,9 @@ def adm_home(request):
     return render(request, 'empleado/admin/adm_home.html', {'empleado': empleado})
 
 def adm_usuarios(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         empleado = Empleado.objects.get(emp_id=request.session['user_id'])
         print("Empleado ID from session:", request.session.get('user_id'))
@@ -269,7 +308,7 @@ def editar_cliente(request, cliente_id):
     }
     return render(request, 'empleado/admin/ediciones/editar_usuario.html', context)
 
-def editar_empleado(request, empleado_id):
+def editar_empleado(request, empleado_id): 
     empleado = get_object_or_404(Empleado, emp_id=empleado_id)
     form_class = EditEmpleadoForm
     
@@ -289,6 +328,9 @@ def editar_empleado(request, empleado_id):
     return render(request, 'empleado/admin/ediciones/editar_usuario.html', context)
 
 def adm_inventario(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
     try:
         empleado = Empleado.objects.get(emp_id=request.session['user_id'])
         print("Empleado ID from session:", request.session.get('user_id'))
@@ -314,7 +356,7 @@ def eliminar_producto(request, prod_id):
         return redirect(request.META.get('HTTP_REFERER'))
     return redirect(request.META.get('HTTP_REFERER'))
 
-def editar_producto(request, prod_id):
+def editar_producto(request, prod_id):    
     producto = get_object_or_404(Inventario, prod_id=prod_id)
 
     if request.method == 'POST':
@@ -329,6 +371,16 @@ def editar_producto(request, prod_id):
     return render(request, 'empleado/admin/ediciones/editar_producto.html', {'form': form, 'producto': producto})
 
 def adm_productos(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
     categorias = CategoriaProducto.objects.all()
     productos = Producto.objects.all()
 
@@ -345,5 +397,23 @@ def adm_productos(request):
         'form': form,
         'productos': productos,
         'categorias': categorias,
+        'empleado': empleado,
     }
     return render(request, 'empleado/admin/adm_productos.html', context)
+
+def adm_pedidos(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    
+    try:
+        empleado = Empleado.objects.get(emp_id=user_id)
+        print("Empleado ID from session:", user_id)
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+
+    # Obtener todos los pedidos y sus items asociados
+    pedidos = Pedido.objects.all()
+
+    return render(request, 'empleado/admin/adm_pedidos.html', {'empleado': empleado, 'pedidos': pedidos})
