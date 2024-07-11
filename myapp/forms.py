@@ -27,6 +27,12 @@ class ProductoForm(forms.ModelForm):
             'catProd_nom': forms.Select(attrs={'class': 'form-control', 'required': True}),
         }
 
+class EditarCuentaForm(forms.ModelForm):
+    class Meta:
+        model = Cliente
+        fields = ['cli_rut', 'cli_name', 'cli_lastname', 'cli_mail', 'cli_fono', 'direccion']
+    direccion = forms.CharField(widget=forms.TextInput(attrs={'id': 'pac-input', 'placeholder': 'Ingrese su dirección'}))
+
 class EditClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente

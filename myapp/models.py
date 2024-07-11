@@ -25,6 +25,7 @@ class Cliente(models.Model):
     cli_password = models.CharField(max_length=20, null=False)
     cli_mail = models.EmailField(null=False)
     cli_fono = models.IntegerField(null=False)
+    direccion = models.CharField(max_length=255, null=True, blank=True)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
     def __str__(self):
         return self.rol.rol_id + ' - ' + self.cli_name +' '+ self.cli_lastname  
@@ -122,10 +123,16 @@ class Pedido(models.Model):
         ('Cancelado', 'Cancelado'),
     ]
     
+    TIPO_CHOICES = [
+        ('Retiro en Tienda', 'Retiro en Tienda'),
+        ('Contratar Despacho', 'Contratar Despacho'),
+    ]
+    
     ped_id = models.AutoField(primary_key=True)
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='Retiro en Tienda')
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='Solicitado')
     
     def __str__(self):

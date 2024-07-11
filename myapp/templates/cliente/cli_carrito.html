@@ -27,6 +27,7 @@
                     <ul>
                         <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
                         <li><a href="/cli_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                        <li><a href="{% url 'cli_cuenta' cliente.cli_id %}" id="cuenta-link"><i class="fas fa-list-alt"></i> Mi Cuenta</a></li>
                         <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                     </ul>
                 </div>
@@ -52,6 +53,29 @@
         <!-- Carrito de Compras -->
         <div class="container">
             <h2>CARRITO DE COMPRAS</h2>
+            
+            {% if request.session.carrito.items %}
+            {% if cliente.direccion %}
+                <!-- Sección para seleccionar el tipo de pedido -->
+                <div>
+                    <form method="POST" action="{% url 'actualizar_tipo_pedido' %}">
+                        {% csrf_token %}
+                        <label for="tipoPedido">Tipo de Pedido:</label>
+                        <select name="tipoPedido" id="tipoPedido">
+                            <option value="Retiro en Tienda" {% if carrito.tipo_pedido == 'Retiro en Tienda' %}selected{% endif %}>Retiro en Tienda</option>
+                            <option value="Contratar Despacho" {% if carrito.tipo_pedido == 'Contratar Despacho' %}selected{% endif %}>Contratar Despacho</option>
+                        </select>
+                        <button type="submit">Actualizar Tipo de Pedido</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="alert alert-warning" role="alert">
+                    Si necesitas un Despacho a domicilio. Por favor, ve al apartado <a href="{% url 'cli_cuenta' cliente.cli_id %}">Mi Cuenta</a> para ingresar tu dirección.
+                </div>
+            {% endif %}
+            {% endif %}
+
+            <br>
             <table class="table">
                 <thead>
                     <tr>
@@ -89,6 +113,7 @@
                     </tr>
                 </tbody>
             </table>
+
             <br>
             <div class="btn-container">
                 {% if request.session.carrito.items %}

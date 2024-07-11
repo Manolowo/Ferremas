@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto, Pedido, PedidoItem
 
 from myapp.carrito import Carrito
-from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm, PedidoForm, PedidoItemForm
+from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm, PedidoForm, PedidoItemForm, EditarCuentaForm
 
 """ ----------------------------------------Home Principal------------------------------------- """
 
@@ -128,7 +128,6 @@ def registrarPedido(request):
     user_id = request.session.get('user_id')
     if not user_id:
         return redirect('home')
-    
     try:
         cliente = Cliente.objects.get(cli_id=user_id)
     except Cliente.DoesNotExist:
@@ -139,7 +138,9 @@ def registrarPedido(request):
     if not carrito.carrito:
         return redirect('cli_carrito')
     
-    pedido = Pedido.objects.create(cliente=cliente, total=total)
+    tipo_pedido = carrito.tipo_pedido  # Obtener el tipo de pedido desde el carrito
+    
+    pedido = Pedido.objects.create(cliente=cliente, total=total, tipo=tipo_pedido)
     
     for item in carrito.carrito.values():
         producto = Inventario.objects.get(prod_id=item['id_prod'])
@@ -152,7 +153,7 @@ def registrarPedido(request):
     
     carrito.limpiar()
     
-    return render(request, 'cliente/registrarPedido.html', {'pedido': pedido})
+    return render(request, 'cliente/registrarPedido.html', {'pedido': pedido , 'cliente': cliente})
 
 def cli_pedidos(request):
     user_id = request.session.get('user_id')
@@ -169,6 +170,19 @@ def cli_pedidos(request):
     pedidos = Pedido.objects.filter(cliente=cliente.cli_id)
 
     return render(request, 'cliente/cli_pedidos.html', {'cliente': cliente, 'pedidos': pedidos})
+
+def cli_cuenta(request, cli_id):
+    cliente = get_object_or_404(Cliente, cli_id=cli_id)
+
+    if request.method == 'POST':
+        form = EditarCuentaForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            return redirect('cli_home') 
+    else:
+        form = EditarCuentaForm(instance=cliente)
+
+    return render(request, 'cliente/cli_cuenta.html', {'form': form})
 
 """_____________________ Carrito _____________________"""
 
@@ -203,6 +217,15 @@ def limpiarCarrito(request):
     carrito = Carrito(request)
     carrito.limpiar()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def actualizarTipoPedido(request):
+    if request.method == 'POST':
+        tipo_pedido = request.POST.get('tipoPedido', 'Retiro en Tienda')  
+        carrito = Carrito(request)
+        carrito.tipo_pedido = tipo_pedido 
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 """ ----------------------------------------Home de usuarios Empleados------------------------------------- """
 

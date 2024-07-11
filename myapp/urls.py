@@ -12,11 +12,14 @@ urlpatterns = [
     path('cli_carrito/', views.cli_carrito, name='cli_carrito'),
     path('registrarPedido/', views.registrarPedido, name='registrarPedido'),
     path('cli_pedidos/', views.cli_pedidos, name='cli_pedidos'),
+    path('cli_cuenta/<int:cli_id>/', views.cli_cuenta, name='cli_cuenta'),
+
     path('generar_factura/<int:pedido_id>/', generar_factura, name='generar_factura'),
     path('agregar/<int:prod_id>/', agregarProducto, name="Add"),
     path('restar/<int:prod_id>/', restarProducto, name="Sub"),
     path('eliminar/<int:prod_id>/', eliminarProducto, name="Del"),
     path('limpiar/', limpiarCarrito, name="CLS"),
+    path('actualizar_tipo_pedido/', views.actualizarTipoPedido, name='actualizar_tipo_pedido'),
     
     path('ven_home/', views.ven_home, name='ven_home'),
     

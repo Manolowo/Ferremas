@@ -8,7 +8,11 @@ class Carrito:
             self.carrito = self.session['carrito']
         else:
             self.carrito = carrito
-            
+
+        # Verificar y establecer el tipo de pedido si no está definido
+        if 'tipo_pedido' not in self.session:
+            self.session['tipo_pedido'] = 'Retiro en Tienda'
+
     def agregar(self, producto):
         id = str(producto.prod_id)
         if id not in self.carrito.keys():
@@ -16,14 +20,14 @@ class Carrito:
                 "id_prod": producto.prod_id,
                 "nombre": producto.prod_nom,
                 "precio": producto.prod_prec,
-                "cantidad": 1,  
-                "subtotal": producto.prod_prec,  
+                "cantidad": 1,
+                "subtotal": producto.prod_prec,
             }
         else:
             self.carrito[id]["cantidad"] += 1
             self.carrito[id]["subtotal"] = self.carrito[id]["cantidad"] * producto.prod_prec
         self.guardarCarrito()
-    
+
     def restar(self, producto):
         id = str(producto.prod_id)
         if id in self.carrito.keys():
@@ -33,7 +37,7 @@ class Carrito:
             else:
                 del self.carrito[id]
         self.guardarCarrito()
-        
+
     def total_carrito(self):
         total = 0
         for item in self.carrito.values():
@@ -43,7 +47,7 @@ class Carrito:
     def guardarCarrito(self):
         self.session["carrito"] = self.carrito
         self.session.modified = True
-    
+
     def eliminar(self, producto):
         id = str(producto.prod_id)
         if id in self.carrito:
@@ -54,3 +58,11 @@ class Carrito:
         self.session["carrito"] = {}
         self.session.modified = True
 
+    @property
+    def tipo_pedido(self):
+        return self.session.get('tipo_pedido', 'Retiro en Tienda')
+
+    @tipo_pedido.setter
+    def tipo_pedido(self, tipo):
+        self.session['tipo_pedido'] = tipo
+        self.session.modified = True

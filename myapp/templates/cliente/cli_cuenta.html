@@ -1,0 +1,148 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar mi cuenta - Ferremas</title>
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="{% static 'styles/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}">
+
+    <!-- Estilos específicos para el mapa y el campo de dirección -->
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-width: calc(100% - 20px);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="navbar">
+                <div class="logo">
+                    <a href="/cli_home">
+                        <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                    </a>
+                </div>
+                <div class="nav-items">
+                    <ul>
+                        <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
+                        <li><a href="/cli_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                        <li><a href="/cli_carrito" id="carrito-link"><i class="fas fa-shopping-cart"></i> Mi Carrito</a></li>
+                        <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" style="margin-top: 100px; margin-left: 15px;">
+        <h2>Editar mi cuenta</h2>
+
+        <!-- Formulario de edición de cuenta -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <!-- Mapa de Google Maps -->
+            <div id="map"></div>
+
+            <!-- Campo oculto para almacenar las coordenadas de la dirección -->
+            <input type="hidden" id="id_direccion" name="direccion">
+
+            <!-- Botón de guardar cambios -->
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </div>
+
+    <!-- Script para cargar la API de Google Maps y controlar el mapa -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmNP79anmLXaEtIaBJHIVfuWg6xlbXV3w&libraries=places&callback=initMap" async defer></script>
+
+    <script>
+        let map;
+        let marker;
+    
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -41.461741, lng: -72.945574 },
+                zoom: 12
+            });
+    
+            // Autocompletado de direcciones
+            const input = document.getElementById('pac-input');
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+    
+            autocomplete.addListener('place_changed', function() {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("No se encontró detalles de la ubicación para '" + place.name + "'");
+                    return;
+                }
+    
+                // Si ya hay un marcador, eliminarlo
+                if (marker) {
+                    marker.setMap(null);
+                }
+    
+                // Crear un marcador para la ubicación seleccionada
+                marker = new google.maps.Marker({
+                    position: place.geometry.location,
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP
+                });
+    
+                // Centrar el mapa en la ubicación seleccionada
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+    
+                // Actualizar el formulario con las coordenadas de la ubicación seleccionada
+                updateForm(place.geometry.location);
+    
+                // Evento al mover el marcador
+                marker.addListener('dragend', function() {
+                    updateForm(marker.getPosition());
+                });
+            });
+        }
+    
+        // Actualizar el formulario con las coordenadas de la ubicación seleccionada
+        function updateForm(location) {
+            const direccionInput = document.getElementById('id_direccion');
+            if (location) {
+                direccionInput.value = location.lat() + ', ' + location.lng();
+            } else {
+                direccionInput.value = '';
+            }
+    
+            // Actualizar el campo visible para el usuario
+            const pacInput = document.getElementById('pac-input');
+            if (direccionInput.value) {
+                pacInput.value = direccionInput.value;
+            } else {
+                pacInput.value = '';
+            }
+        }
+    </script>
+
+</body>
+</html>

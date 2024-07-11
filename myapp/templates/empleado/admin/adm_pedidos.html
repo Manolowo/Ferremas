@@ -46,6 +46,7 @@
                         <th>ID</th>
                         <th>Cliente</th>
                         <th>Fecha</th>
+                        <th>Tipo de pedido</th>
                         <th>Total</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -57,6 +58,7 @@
                         <td>{{ pedido.ped_id }}</td>
                         <td>{{ pedido.cliente.cli_name }} {{ pedido.cliente.cli_lastname }}</td>
                         <td>{{ pedido.fecha }}</td>
+                        <td>{{ pedido.tipo }}</td>
                         <td>${{ pedido.total }}</td>
                         <td>{{ pedido.estado }}</td>
                         <td class="acciones-column">
