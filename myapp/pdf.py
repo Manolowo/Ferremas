@@ -9,7 +9,9 @@ def generar_factura(request, pedido_id):
     except Pedido.DoesNotExist:
         return HttpResponse('Pedido no encontrado', status=404)
 
-    html_string = render_to_string('cliente/factura.html', {'pedido': pedido})
+    cliente = pedido.cliente
+
+    html_string = render_to_string('cliente/factura.html', {'pedido': pedido, 'cliente': cliente})
     html = HTML(string=html_string)
     pdf = html.write_pdf()
 

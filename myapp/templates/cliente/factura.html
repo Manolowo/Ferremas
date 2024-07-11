@@ -83,6 +83,13 @@
         <h1>¡Gracias por tu compra!</h1>
         <p>Tu pedido ha sido registrado con éxito.</p>
 
+        <h2>Detalles del Cliente</h2>
+
+        <p>Nombre: <strong>{{ pedido.cliente.cli_name }} {{ pedido.cliente.cli_lastname }}</strong></p>
+        <p>RUT: <strong>{{ pedido.cliente.cli_rut }}</strong></p>
+        <p>Email: <strong>{{ pedido.cliente.cli_mail }}</strong></p>
+        <p>Teléfono: <strong>{{ pedido.cliente.cli_fono }}</strong></p>
+
         <h2>Detalles del Pedido</h2>
         <p>ID del Pedido: <strong>{{ pedido.ped_id }}</strong></p>
         <p>Fecha: <strong>{{ pedido.fecha }}</strong></p>

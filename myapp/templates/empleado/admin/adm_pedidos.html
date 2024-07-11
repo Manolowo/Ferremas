@@ -8,6 +8,7 @@
     <title>Ferremas</title>
     <!-- .css -->
     <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+    <link rel="stylesheet" href="{% static '/styles/empleado/admin/adm_pedidos.css' %}" />
 
 </head>
 <body>
@@ -38,43 +39,50 @@
 
         <h2> Administrar Pedidos</h2>
     
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Fecha</th>
-                <th>Total</th>
-                <th>Estado</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pedido in pedidos %}
-            <tr>
-                <td>{{ pedido.ped_id }}</td>
-                <td>{{ pedido.cliente.cli_name }} {{ pedido.cliente.cli_lastname }}</td>
-                <td>{{ pedido.fecha }}</td>
-                <td>${{ pedido.total }}</td>
-                <td>{{ pedido.estado }}</td>
-            </tr>
-            <tr>
-                <td colspan="5" class="items">
-                    <strong>Items:</strong>
-                    <ul>
-                        {% for item in pedido.items.all %}
-                        <li>{{ item.producto.prod_nom }} - Cantidad: {{ item.cantidad }} - Precio Unitario: ${{ item.precio }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No hay pedidos registrados.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-        
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.ped_id }}</td>
+                        <td>{{ pedido.cliente.cli_name }} {{ pedido.cliente.cli_lastname }}</td>
+                        <td>{{ pedido.fecha }}</td>
+                        <td>${{ pedido.total }}</td>
+                        <td>{{ pedido.estado }}</td>
+                        <td class="acciones-column">
+                            <a href="{% url 'generar_factura' pedido.ped_id %}" class="btn btn-download" target="_blank">Descargar Factura</a>
+                            <a href="{% url 'estado_pedido' pedido.ped_id %}" class="btn btn-estado">Cambiar Estado</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="items">
+                            <strong>Items:</strong>
+                            <ul>
+                                {% for item in pedido.items.all %}
+                                <li>{{ item.producto.prod_nom }} - Cantidad: {{ item.cantidad }} - Precio Unitario: ${{ item.precio }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6">No hay pedidos registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
 </body>

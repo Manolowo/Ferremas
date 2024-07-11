@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Empleado, Inventario, Producto
+from .models import Cliente, Empleado, Inventario, Producto, Pedido, PedidoItem
 
 class EditProductoForm(forms.ModelForm):
     class Meta:
@@ -95,4 +95,14 @@ class EmpleadoForm(forms.ModelForm):
             'emp_fono': forms.NumberInput(attrs={'class': 'form-control'}),
             'rol': forms.Select(attrs={'class': 'form-control'}),
         }
+
+class PedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['estado']
+
+class PedidoItemForm(forms.ModelForm):
+    class Meta:
+        model = PedidoItem
+        fields = ['producto', 'cantidad', 'precio']
 

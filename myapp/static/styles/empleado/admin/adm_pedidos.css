@@ -1,0 +1,69 @@
+.table {
+    width: 100%; /* Ancho completo */
+    border-collapse: collapse; /* Colapso de bordes */
+    border: 2px solid rgb(82, 2, 82); /* Borde sólido morado */
+    border-radius: 5px; /* Bordes redondeados */
+    overflow: hidden; /* Ocultar cualquier contenido adicional que supere el ancho */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+/* Estilos para las celdas de la tabla */
+.table th, .table td {
+    border: 2px solid rgb(82, 2, 82); 
+    padding: 5px; 
+}
+
+/* Estilos para la fila de encabezado */
+.table thead tr {
+    background-color: rgb(82, 2, 82); 
+    color: #fff; 
+}
+
+/* Estilos para las filas de datos alternas */
+.table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Fondo gris claro para filas pares */
+}
+
+.btn-download {
+    display: inline-block; /* Asegura que el enlace sea un bloque en línea */
+    text-align: center; /* Centra el texto dentro del enlace */
+    margin: 0 auto; /* Margen automático para centrar el enlace */
+    background-color: #006b12;
+    color: #fff; /* Letras blancas */
+    padding: 8px 10px; /* Ajuste de relleno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambio de cursor */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+    font-size: 14px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.btn-download:hover {
+    background-color: #01470d; /* Morado más oscuro */
+}
+
+.btn-estado {
+    display: inline-block; /* Asegura que el enlace sea un bloque en línea */
+    text-align: center; /* Centra el texto dentro del enlace */
+    margin: 0 auto; /* Margen automático para centrar el enlace */
+    background-color: #b3b606;
+    color: #fff; /* Letras blancas */
+    padding: 8px 10px; /* Ajuste de relleno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambio de cursor */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+    font-size: 14px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.btn-estado:hover {
+    background-color: #7f8d03; /* Morado más oscuro */
+}

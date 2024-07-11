@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto, Pedido, PedidoItem
 
 from myapp.carrito import Carrito
-from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm
+from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm, PedidoForm, PedidoItemForm
 
 """ ----------------------------------------Home Principal------------------------------------- """
 
@@ -139,10 +139,8 @@ def registrarPedido(request):
     if not carrito.carrito:
         return redirect('cli_carrito')
     
-    # Crear el pedido
     pedido = Pedido.objects.create(cliente=cliente, total=total)
     
-    # Crear los items del pedido
     for item in carrito.carrito.values():
         producto = Inventario.objects.get(prod_id=item['id_prod'])
         PedidoItem.objects.create(
@@ -433,3 +431,19 @@ def adm_pedidos(request):
     pedidos = Pedido.objects.all()
 
     return render(request, 'empleado/admin/adm_pedidos.html', {'empleado': empleado, 'pedidos': pedidos})
+
+def estado_pedido(request, ped_id):
+    pedido = get_object_or_404(Pedido, ped_id=ped_id)
+    
+    if request.method == 'POST':
+        pedido_form = PedidoForm(request.POST, instance=pedido)
+        if pedido_form.is_valid():
+            pedido_form.save()
+            return redirect('adm_pedidos')
+    else:
+        pedido_form = PedidoForm(instance=pedido)
+        
+    return render(request, 'empleado/admin/ediciones/estado_pedido.html', {
+        'pedido_form': pedido_form,
+        'pedido': pedido,
+    })

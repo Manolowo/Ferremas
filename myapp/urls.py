@@ -25,7 +25,6 @@ urlpatterns = [
     path('con_home/', views.con_home, name='con_home'),
     
     path('adm_home/', views.adm_home, name='adm_home'),
-    
     path('adm_usuarios/', views.adm_usuarios, name='adm_usuarios'),
     path('eliminar_cliente/<int:cliente_id>/', views.eliminar_cliente, name='eliminar_cliente'),
     path('eliminar_empleado/<int:empleado_id>/', views.eliminar_empleado, name='eliminar_empleado'),
@@ -36,5 +35,6 @@ urlpatterns = [
     path('editar_producto/<int:prod_id>/', views.editar_producto, name='editar_producto'),
     path('adm_productos/', views.adm_productos, name='adm_productos'),
     path('adm_pedidos/', views.adm_pedidos, name='adm_pedidos'),
+    path('estado_pedido/<int:ped_id>/', views.estado_pedido, name='estado_pedido'),
     
 ]
