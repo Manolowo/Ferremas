@@ -5,11 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Producto</title>
+    <title>Ferremas - Crear Factura</title>
     <!-- .css -->
-    <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
-    <link rel="stylesheet" href="{% static '/styles/form.css' %}">
-
+    <link rel="stylesheet" href="{% static 'styles/nav.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/form.css' %}" />
 </head>
 <body>
 
@@ -18,7 +17,7 @@
             <div class="navbar">
                 <div class="logo">
                     <a href="/adm_home">
-                        <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                        <img src="{% static 'logo/LogoFerremas.png' %}" alt="Logo" />
                     </a>
                 </div>
                 <div class="nav-items">
@@ -36,14 +35,17 @@
         </nav>
     </header>
 
-    <div class="content" style="margin-top: 100px; margin-left: 15px;">
-        <h2>Editar Producto: {{ producto.prod_nom }}</h2>
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
+        <h2>Crear Factura</h2>
 
-        <form method="post" enctype="multipart/form-data">
+        <!-- Formulario para los datos básicos de la factura -->
+        <form method="POST" action="{% url 'crear_factura' %}">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Guardar Cambios</button>
+            {{ factura_form.as_p }}
+    
+            <button type="submit">Crear Factura</button>
         </form>
+
     </div>
 
 </body>

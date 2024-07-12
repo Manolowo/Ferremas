@@ -116,8 +116,14 @@ class FacturaForm(forms.ModelForm):
     class Meta:
         model = Factura
         fields = ['fac_cli_name', 'fac_cli_rut', 'detalles']
+        labels = {
+            'fac_cli_name': 'Nombre del cliente',
+            'fac_cli_rut': 'Rut del cliente',
+            'detalles': 'Comentarios',
+        }
 
 class FacturaItemForm(forms.ModelForm):
     class Meta:
         model = FacturaItem
         fields = ['producto', 'cantidad']
+

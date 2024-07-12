@@ -13,7 +13,6 @@ urlpatterns = [
     path('registrarPedido/', views.registrarPedido, name='registrarPedido'),
     path('cli_pedidos/', views.cli_pedidos, name='cli_pedidos'),
     path('cli_cuenta/<int:cli_id>/', views.cli_cuenta, name='cli_cuenta'),
-
     path('generar_factura/<int:pedido_id>/', generar_factura, name='generar_factura'),
     path('agregar/<int:prod_id>/', agregarProducto, name="Add"),
     path('restar/<int:prod_id>/', restarProducto, name="Sub"),
@@ -26,12 +25,16 @@ urlpatterns = [
     path('ven_estado_pedido/<int:ped_id>/', views.ven_estado_pedido, name='ven_estado_pedido'),
     path('ven_inventario/', views.ven_inventario, name='ven_inventario'),
     path('ven_facturacion/', views.ven_facturacion, name='ven_facturacion'),
-    path('crear_factura/', views.crear_factura, name='crear_factura'),
-    path('agregar_a_factura/<int:fac_id>/', views.agregar_a_factura, name='agregar_a_factura'),
+    path('ven_crear_factura/', views.ven_crear_factura, name='ven_crear_factura'),
+    path('ven_agregar_a_factura/<int:fac_id>/', views.ven_agregar_a_factura, name='ven_agregar_a_factura'),
     
-    path('generar_factura_local/<int:fac_id>/', generar_factura_local, name='generar_factura_local'),
     
     path('bod_home/', views.bod_home, name='bod_home'),
+    path('bod_ordenesP/', views.bod_ordenesP, name='bod_ordenesP'),
+    path('bod_estado_pedido/<int:ped_id>/', views.bod_estado_pedido, name='bod_estado_pedido'),
+    path('bod_inventario/', views.bod_inventario, name='bod_inventario'),
+    path('bod_editar_producto/<int:prod_id>/', views.bod_editar_producto, name='bod_editar_producto'),
+    path('bod_productos/', views.bod_productos, name='bod_productos'),
     
     path('con_home/', views.con_home, name='con_home'),
     
@@ -48,4 +51,9 @@ urlpatterns = [
     path('adm_pedidos/', views.adm_pedidos, name='adm_pedidos'),
     path('estado_pedido/<int:ped_id>/', views.estado_pedido, name='estado_pedido'),
     
+    path('adm_facturacion/', views.adm_facturacion, name='adm_facturacion'),
+    path('crear_factura/', views.crear_factura, name='crear_factura'),
+    path('agregar_a_factura/<int:fac_id>/', views.agregar_a_factura, name='agregar_a_factura'),
+    path('eliminar_facturacion/<int:fac_id>/', views.eliminar_facturacion, name='eliminar_facturacion'),
+    path('generar_factura_local/<int:fac_id>/', generar_factura_local, name='generar_factura_local'),
 ]

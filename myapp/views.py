@@ -313,7 +313,7 @@ def ven_facturacion(request):
     facturas = Factura.objects.all()
     return render(request, 'empleado/vendedor/ven_facturacion.html', {'empleado': empleado,'facturas': facturas })
 
-def crear_factura(request):
+def ven_crear_factura(request):
     if request.method == 'POST':
         factura_form = FacturaForm(request.POST)
         
@@ -352,7 +352,7 @@ def crear_factura(request):
 
     return render(request, 'empleado/vendedor/ediciones/crear_factura.html', context)
 
-def agregar_a_factura(request, fac_id):
+def ven_agregar_a_factura(request, fac_id):
     factura = get_object_or_404(Factura, fac_id=fac_id)
 
     if request.method == 'POST':
@@ -375,7 +375,7 @@ def agregar_a_factura(request, fac_id):
             factura.save()
 
             # Redirigir a agregar_a_factura nuevamente después de agregar un ítem
-            return redirect('agregar_a_factura', fac_id=fac_id)
+            return redirect('ven_agregar_a_factura', fac_id=fac_id)
 
     else:
         factura_item_form = FacturaItemForm()
@@ -404,6 +404,105 @@ def bod_home(request):
         return JsonResponse({'error': 'Empleado no encontrado'})
     
     return render(request, 'empleado/bodeguero/bod_home.html', {'empleado': empleado})
+
+def bod_ordenesP(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    
+    try:
+        empleado = Empleado.objects.get(emp_id=user_id)
+        print("Empleado ID from session:", user_id)
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+
+    # Obtener todos los pedidos y sus items asociados
+    pedidos = Pedido.objects.filter(estado='En Proceso')
+
+    return render(request, 'empleado/bodeguero/bod_ordenesP.html', {'empleado': empleado, 'pedidos': pedidos})
+
+def bod_estado_pedido(request, ped_id):
+    pedido = get_object_or_404(Pedido, ped_id=ped_id)
+    
+    if request.method == 'POST':
+        pedido_form = PedidoForm(request.POST, instance=pedido)
+        if pedido_form.is_valid():
+            pedido_form.save()
+            return redirect('bod_ordenesP')
+    else:
+        pedido_form = PedidoForm(instance=pedido)
+        
+    return render(request, 'empleado/bodeguero/ediciones/estado_pedido.html', {
+        'pedido_form': pedido_form,
+        'pedido': pedido,
+    })
+
+def bod_inventario(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    productos = Inventario.objects.all()
+    categorias = CategoriaProducto.objects.all()
+
+    categoria_filtro = request.GET.get('categoria')
+
+    if categoria_filtro:
+        productos = productos.filter(catProd_nom__catProd_nom=categoria_filtro)
+
+    return render(request, 'empleado/bodeguero/bod_inventario.html', {'empleado': empleado, 'productos': productos, 'categorias': categorias})
+
+def bod_editar_producto(request, prod_id):    
+    producto = get_object_or_404(Inventario, prod_id=prod_id)
+
+    if request.method == 'POST':
+        form = EditProductoForm(request.POST, request.FILES, instance=producto)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto editado correctamente.')
+            return redirect('bod_inventario')  
+    else:
+        form = EditProductoForm(instance=producto)
+
+    return render(request, 'empleado/bodeguero/ediciones/editar_producto.html', {'form': form, 'producto': producto})
+
+def bod_productos(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    categorias = CategoriaProducto.objects.all()
+    productos = Producto.objects.all()
+
+    if request.method == 'POST':
+        form = ProductoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Producto añadido correctamente.')
+            return redirect('bod_productos')
+    else:
+        form = ProductoForm()
+
+    context = {
+        'form': form,
+        'productos': productos,
+        'categorias': categorias,
+        'empleado': empleado,
+    }
+    return render(request, 'empleado/bodeguero/bod_productos.html', context)
 
 """ ----------------------------------------Contadores------------------------------------- """
 
@@ -616,3 +715,100 @@ def estado_pedido(request, ped_id):
         'pedido_form': pedido_form,
         'pedido': pedido,
     })
+
+def adm_facturacion(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    facturas = Factura.objects.all()
+    return render(request, 'empleado/admin/adm_facturacion.html', {'empleado': empleado,'facturas': facturas })
+
+def crear_factura(request):
+    if request.method == 'POST':
+        factura_form = FacturaForm(request.POST)
+        
+        if factura_form.is_valid():
+            fac_cli_name = factura_form.cleaned_data['fac_cli_name']
+            fac_cli_rut = factura_form.cleaned_data['fac_cli_rut']
+            detalles = factura_form.cleaned_data['detalles']
+
+            # Obtener el ID del usuario de la sesión
+            user_id = request.session.get('user_id')
+            if not user_id:
+                return redirect('home')  # Redirigir si no hay ID de usuario en la sesión
+
+            try:
+                empleado = Empleado.objects.get(emp_id=user_id)
+            except Empleado.DoesNotExist:
+                return JsonResponse({'error': 'Empleado no encontrado'})
+
+            factura = Factura.objects.create(
+                fac_cli_name=fac_cli_name,
+                fac_cli_rut=fac_cli_rut,
+                vendedor=empleado,
+                detalles=detalles,
+                monto_total=0
+            )
+
+            # Redirigir a ven_facturacion después de crear la factura
+            return redirect('adm_facturacion')
+
+    else:
+        factura_form = FacturaForm()
+
+    context = {
+        'factura_form': factura_form,
+    }
+
+    return render(request, 'empleado/admin/ediciones/crear_factura.html', context)
+
+def agregar_a_factura(request, fac_id):
+    factura = get_object_or_404(Factura, fac_id=fac_id)
+
+    if request.method == 'POST':
+        factura_item_form = FacturaItemForm(request.POST)
+        
+        if factura_item_form.is_valid():
+            producto_id = factura_item_form.cleaned_data['producto'].prod_id
+            cantidad = factura_item_form.cleaned_data['cantidad']
+            producto = Inventario.objects.get(prod_id=producto_id)
+            precio_total = producto.prod_prec * cantidad
+
+            factura_item = FacturaItem.objects.create(
+                factura=factura,
+                producto=producto,
+                cantidad=cantidad,
+                precio=producto.prod_prec
+            )
+
+            factura.monto_total += precio_total
+            factura.save()
+
+            # Redirigir a agregar_a_factura nuevamente después de agregar un ítem
+            return redirect('agregar_a_factura', fac_id=fac_id)
+
+    else:
+        factura_item_form = FacturaItemForm()
+
+    productos_factura = FacturaItem.objects.filter(factura=factura)
+
+    context = {
+        'factura': factura,
+        'factura_item_form': factura_item_form,
+        'productos_factura': productos_factura,
+    }
+
+    return render(request, 'empleado/admin/ediciones/agregar_a_factura.html', context)
+
+def eliminar_facturacion(request, fac_id):
+    factura = get_object_or_404(Factura, fac_id=fac_id)
+    factura.delete()
+    messages.success(request, 'Factura eliminada correctamente.')
+    return redirect('adm_facturacion')

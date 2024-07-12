@@ -17,17 +17,14 @@
         <nav>
             <div class="navbar">
             <div class="logo">
-                <a href="/adm_home">
+                <a href="/bod_home">
                 <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
                 </a>
             </div>
             <div class="nav-items">
                 <ul>
-                    <li><a href="/adm_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
-                    <li><a href="/adm_productos" id="productos-link"><i class="fas fa-list-alt"></i> Productos</a></li>
-                    <li><a href="/adm_facturacion" id="facturacion-link"><i class="fas fa-list-alt"></i> Facturación</a></li>
-                    <li><a href="#" id="reportes-link"><i class="fas fa-list-alt"></i> Reportes</a></li>
-                    <li><a href="/adm_usuarios" id="usuarios-link"><i class="fas fa-list-alt"></i> Usuarios</a></li>
+                    <li><a href="/bod_ordenesP" id="ordenesP-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                    <li><a href="/bod_productos" id="productos-link"><i class="fas fa-list-alt"></i> Productos</a></li>
                     <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                 </ul>
             </div>
@@ -35,8 +32,8 @@
         </nav>
     </header>
 
-    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px;">
-
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
+        
         <h2> Administración de Inventario</h2>
         
         <!-- Barra de búsqueda -->
@@ -82,7 +79,7 @@
                         <p>Disponibles: {{ producto.inv_cantTotal }}</p>
                         <div class="acciones-producto">
                             <p>
-                                <a href="{% url 'editar_producto' producto.prod_id %}" class="editar-producto">Editar</a>
+                                <a href="{% url 'bod_editar_producto' producto.prod_id %}" class="editar-producto">Editar</a>
                             </p>
                             <br>
                             <form method="post" action="{% url 'eliminar_producto' producto.prod_id %}">
@@ -98,6 +95,8 @@
     </div>
 
     <script src="{% static 'js/cliente/filtrarProductos.js' %}"></script>
+        
+    </div>
 
 </body>
 </html>

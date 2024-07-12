@@ -67,3 +67,25 @@
 .btn-estado:hover {
     background-color: #7f8d03; /* Morado más oscuro */
 }
+
+.btn-eliminar {
+    display: inline-block; /* Asegura que el enlace sea un bloque en línea */
+    text-align: center; /* Centra el texto dentro del enlace */
+    margin: 0 auto; /* Margen automático para centrar el enlace */
+    background-color: #aa0707;
+    color: #fff; /* Letras blancas */
+    padding: 8px 10px; /* Ajuste de relleno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambio de cursor */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+    font-size: 14px; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    letter-spacing: 1px; /* Espaciado entre letras */
+    text-decoration: none; /* Sin subrayado */
+}
+
+.btn-eliminar:hover {
+    background-color: #8d0303; /* Morado más oscuro */
+}
