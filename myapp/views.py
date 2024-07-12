@@ -120,8 +120,9 @@ def cli_carrito(request):
     carrito = Carrito(request)
     productos_en_carrito = carrito.carrito.values()
     total_carrito = carrito.total_carrito()
+    tipo_pedido = carrito.tipo_pedido
 
-    return render(request, 'cliente/cli_carrito.html', {'cliente': cliente, 'productos': productos_en_carrito, 'totalCarrito': total_carrito})
+    return render(request, 'cliente/cli_carrito.html', {'cliente': cliente, 'productos': productos_en_carrito, 'totalCarrito': total_carrito, 'tipo_pedido': tipo_pedido})
 
 def registrarPedido(request):
     carrito = Carrito(request)
@@ -243,6 +244,62 @@ def ven_home(request):
         return JsonResponse({'error': 'Empleado no encontrado'})
     
     return render(request, 'empleado/vendedor/ven_home.html', {'empleado': empleado})
+
+def ven_pedidos(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    
+    try:
+        empleado = Empleado.objects.get(emp_id=user_id)
+        print("Empleado ID from session:", user_id)
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+
+    # Obtener todos los pedidos y sus items asociados
+    pedidos = Pedido.objects.all()
+
+    return render(request, 'empleado/vendedor/ven_pedidos.html', {'empleado': empleado, 'pedidos': pedidos})
+
+def ven_estado_pedido(request, ped_id):
+    pedido = get_object_or_404(Pedido, ped_id=ped_id)
+    
+    if request.method == 'POST':
+        pedido_form = PedidoForm(request.POST, instance=pedido)
+        if pedido_form.is_valid():
+            pedido_form.save()
+            return redirect('ven_pedidos')
+    else:
+        pedido_form = PedidoForm(instance=pedido)
+        
+    return render(request, 'empleado/vendedor/ediciones/estado_pedido.html', {
+        'pedido_form': pedido_form,
+        'pedido': pedido,
+    })
+
+def ven_inventario(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    productos = Inventario.objects.all()
+    categorias = CategoriaProducto.objects.all()
+
+    categoria_filtro = request.GET.get('categoria')
+
+    if categoria_filtro:
+        productos = productos.filter(catProd_nom__catProd_nom=categoria_filtro)
+
+    return render(request, 'empleado/vendedor/ven_inventario.html', {'empleado': empleado, 'productos': productos, 'categorias': categorias})
+
+
 
 """ ----------------------------------------Bodegueros------------------------------------- """
 

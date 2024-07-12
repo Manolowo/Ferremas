@@ -25,7 +25,6 @@
                 </div>
                 <div class="nav-items">
                     <ul>
-                        <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
                         <li><a href="/cli_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
                         <li><a href="{% url 'cli_cuenta' cliente.cli_id %}" id="cuenta-link"><i class="fas fa-list-alt"></i> Mi Cuenta</a></li>
                         <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
@@ -55,8 +54,10 @@
             <h2>CARRITO DE COMPRAS</h2>
             
             {% if request.session.carrito.items %}
+            <p>Tipo de pedido seleccionado: {{ tipo_pedido  }} </p>
             {% if cliente.direccion %}
                 <!-- Sección para seleccionar el tipo de pedido -->
+                
                 <div>
                     <form method="POST" action="{% url 'actualizar_tipo_pedido' %}">
                         {% csrf_token %}

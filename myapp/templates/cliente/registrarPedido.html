@@ -22,7 +22,6 @@
             </div>
             <div class="nav-items">
                 <ul>
-                <li><a href="#" id="ofertas-link"><i class="fas fa-list-alt"></i> Ofertas</a></li>
                 <li><a href="/cli_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
                 <li><a href="{% url 'cli_cuenta' cliente.cli_id %}" id="cuenta-link"><i class="fas fa-list-alt"></i> Mi Cuenta</a></li>
                 <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
@@ -37,6 +36,9 @@
         <p>Tu pedido ha sido registrado con éxito.</p>
         <h2>Detalles del Pedido</h2>
         <p>ID del Pedido: {{ pedido.ped_id }}</p>
+        {% if pedido.tipo == 'Contratar Despacho' %}
+            <p> Lugar de entrega del pedido: <strong> {{ pedido.cliente.direccion }} </strong></p>
+        {% endif %}
         <p>Fecha: {{ pedido.fecha }}</p>
         <p>Tipo de pedido: {{ pedido.tipo }}</p>
         <p>Total: ${{ pedido.total }}</p>

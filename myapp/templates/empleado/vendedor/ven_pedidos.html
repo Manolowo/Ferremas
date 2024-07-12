@@ -8,7 +8,7 @@
     <title>Ferremas</title>
     <!-- .css -->
     <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
-    <link rel="stylesheet" href="{% static '/styles/cliente/cli_pedidos.css' %}" />
+    <link rel="stylesheet" href="{% static '/styles/empleado/admin/adm_pedidos.css' %}" />
 
 </head>
 <body>
@@ -17,15 +17,15 @@
         <nav>
             <div class="navbar">
             <div class="logo">
-                <a href="/cli_home">
+                <a href="/ven_home">
                 <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
                 </a>
             </div>
             <div class="nav-items">
                 <ul>
-                <li><a href="/cli_carrito" id="carrito-link"><i class="fas fa-shopping-cart"></i> Mi Carrito</a></li>
-                <li><a href="{% url 'cli_cuenta' cliente.cli_id %}" id="cuenta-link"><i class="fas fa-list-alt"></i> Mi Cuenta</a></li>
-                <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                    <li><a href="/ven_inventario" id="inventario-link"><i class="fas fa-list-alt"></i> Inventario</a></li>
+                    <li><a href="#" id="facturaciones-link"><i class="fas fa-list-alt"></i> Facturaciones</a></li>
+                    <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                 </ul>
             </div>
             </div>
@@ -34,7 +34,7 @@
 
     <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
 
-        <h2> Historial de sus Pedidos</h2>
+        <h2> Administrar Pedidos</h2>
     
         <div class="table-container">
             <table class="table">
@@ -60,6 +60,7 @@
                         <td>{{ pedido.estado }}</td>
                         <td class="acciones-column">
                             <a href="{% url 'generar_factura' pedido.ped_id %}" class="btn btn-download" target="_blank">Descargar Factura</a>
+                            <a href="{% url 'ven_estado_pedido' pedido.ped_id %}" class="btn btn-estado">Cambiar Estado</a>
                         </td>
                     </tr>
                     <tr>

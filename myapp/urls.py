@@ -22,6 +22,9 @@ urlpatterns = [
     path('actualizar_tipo_pedido/', views.actualizarTipoPedido, name='actualizar_tipo_pedido'),
     
     path('ven_home/', views.ven_home, name='ven_home'),
+    path('ven_pedidos/', views.ven_pedidos, name='ven_pedidos'),
+    path('ven_estado_pedido/<int:ped_id>/', views.ven_estado_pedido, name='ven_estado_pedido'),
+    path('ven_inventario/', views.ven_inventario, name='ven_inventario'),
     
     path('bod_home/', views.bod_home, name='bod_home'),
     

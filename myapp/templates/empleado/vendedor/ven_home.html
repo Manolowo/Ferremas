@@ -1,1 +1,44 @@
-<h1>Ven_home</h1>
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas</title>
+    <!-- .css -->
+    <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="navbar">
+            <div class="logo">
+                <a href="/ven_home">
+                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                </a>
+            </div>
+            <div class="nav-items">
+                <ul>
+                    <li><a href="/ven_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                    <li><a href="/ven_inventario" id="inventario-link"><i class="fas fa-list-alt"></i> Inventario</a></li>
+                    <li><a href="#" id="facturaciones-link"><i class="fas fa-list-alt"></i> Facturaciones</a></li>
+                    <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
+
+        <h2> Bienvenido a Ferremas, {{empleado.emp_name}} {{empleado.emp_lastname}}.</h2>
+        
+        
+        
+    </div>
+
+</body>
+</html>
