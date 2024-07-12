@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from myapp.views import agregarProducto,eliminarProducto,restarProducto,limpiarCarrito
-from myapp.pdf import generar_factura
+from myapp.pdf import generar_factura, generar_factura_local
 
 urlpatterns = [
     path('', views.home, name="home"),
@@ -25,6 +25,11 @@ urlpatterns = [
     path('ven_pedidos/', views.ven_pedidos, name='ven_pedidos'),
     path('ven_estado_pedido/<int:ped_id>/', views.ven_estado_pedido, name='ven_estado_pedido'),
     path('ven_inventario/', views.ven_inventario, name='ven_inventario'),
+    path('ven_facturacion/', views.ven_facturacion, name='ven_facturacion'),
+    path('crear_factura/', views.crear_factura, name='crear_factura'),
+    path('agregar_a_factura/<int:fac_id>/', views.agregar_a_factura, name='agregar_a_factura'),
+    
+    path('generar_factura_local/<int:fac_id>/', generar_factura_local, name='generar_factura_local'),
     
     path('bod_home/', views.bod_home, name='bod_home'),
     

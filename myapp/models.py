@@ -146,3 +146,26 @@ class PedidoItem(models.Model):
 
     def __str__(self):
         return f"{self.pedido.ped_id} - {self.producto.prod_nom} - {self.cantidad}"
+    
+""" ----------------------------------------Facturas Locales------------------------------------- """
+
+class Factura(models.Model):
+    fac_id = models.AutoField(primary_key=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    monto_total = models.DecimalField(max_digits=10, decimal_places=2)
+    fac_cli_name = models.CharField(max_length=50, null=False)
+    fac_cli_rut = models.CharField(max_length=12, null=False)
+    vendedor = models.ForeignKey(Empleado, on_delete=models.CASCADE)  # Vendedor que realizó la venta
+    detalles = models.TextField(null=True, blank=True)  
+
+    def __str__(self):
+        return f'Factura {self.fac_id} - {self.fac_cli_name}'
+    
+class FacturaItem(models.Model):
+    factura = models.ForeignKey(Factura, on_delete=models.CASCADE, related_name='items')
+    producto = models.ForeignKey(Inventario, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)  
+
+    def __str__(self):
+        return f'{self.producto.prod_nom} - {self.cantidad} unidades'

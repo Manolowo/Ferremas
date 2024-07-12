@@ -1,0 +1,89 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferremas</title>
+    <!-- .css -->
+    <link rel="stylesheet" href="{% static '/styles/nav.css' %}" />
+    <link rel="stylesheet" href="{% static '/styles/empleado/admin/adm_pedidos.css' %}" />
+
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="navbar">
+            <div class="logo">
+                <a href="/ven_home">
+                <img src="{% static '/logo/LogoFerremas.png' %}" alt="Logo" />
+                </a>
+            </div>
+            <div class="nav-items">
+                <ul>
+                    <li><a href="/ven_pedidos" id="pedidos-link"><i class="fas fa-list-alt"></i> Pedidos</a></li>
+                    <li><a href="/ven_inventario" id="inventario-link"><i class="fas fa-list-alt"></i> Facturaciones</a></li>
+                    <li><a href="/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                </ul>
+            </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content" id="text1" style="margin-top: 100px; margin-left: 15px; font-family: Arial, sans-serif">
+        <h2> Administración de Factulas locales</h2>
+        
+        <div style="margin-bottom: 20px;">
+            <a href="/crear_factura">
+                <button type="button" class="btn btn-download">+ Crear Factura</button>
+            </a>
+        </div>
+
+        <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>RUT</th>
+                    <th>Vendedor</th>
+                    <th>Monto Total</th>
+                    <th>Detalles</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for factura in facturas %}
+                <tr>
+                    <td>{{ factura.fac_id }}</td>
+                    <td>{{ factura.fecha }}</td>
+                    <td>{{ factura.fac_cli_name }}</td>
+                    <td>{{ factura.fac_cli_rut }}</td>
+                    <td>{{ factura.vendedor.emp_name }}</td>
+                    <td>{{ factura.monto_total }}</td>
+                    {% if factura.detalles in factura %}
+                        <td>{{ factura.detalles }}</td>
+                    {% else %}
+                        <td> Sin detalle </td>
+                    {% endif %}
+                    <td class="acciones-column">
+                        <a href="{% url 'agregar_a_factura' factura.fac_id %}" class="btn btn-estado">Agregar a factura</a>
+                        <a href="{% url 'generar_factura_local' factura.fac_id %}" class="btn btn-download" target="_blank">Descargar Factura</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">No hay facturas registradas.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div>
+
+    </div>
+
+</body>
+</html>

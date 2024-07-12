@@ -1,5 +1,5 @@
 from django import forms
-from .models import Cliente, Empleado, Inventario, Producto, Pedido, PedidoItem
+from .models import Cliente, Empleado, Inventario, Producto, Pedido, PedidoItem, Factura, FacturaItem
 
 class EditProductoForm(forms.ModelForm):
     class Meta:
@@ -112,3 +112,12 @@ class PedidoItemForm(forms.ModelForm):
         model = PedidoItem
         fields = ['producto', 'cantidad', 'precio']
 
+class FacturaForm(forms.ModelForm):
+    class Meta:
+        model = Factura
+        fields = ['fac_cli_name', 'fac_cli_rut', 'detalles']
+
+class FacturaItemForm(forms.ModelForm):
+    class Meta:
+        model = FacturaItem
+        fields = ['producto', 'cantidad']

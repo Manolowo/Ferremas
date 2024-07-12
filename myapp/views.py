@@ -1,10 +1,10 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto, Pedido, PedidoItem
+from .models import Cliente, Rol, Empleado, Inventario, CategoriaProducto, Producto, Pedido, PedidoItem, Factura, FacturaItem
 
 from myapp.carrito import Carrito
-from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm, PedidoForm, PedidoItemForm, EditarCuentaForm
+from .forms import EditProductoForm, ProductoForm, EditClienteForm, EditEmpleadoForm, EmpleadoForm, PedidoForm, PedidoItemForm, EditarCuentaForm, FacturaForm, FacturaItemForm
 
 """ ----------------------------------------Home Principal------------------------------------- """
 
@@ -299,7 +299,96 @@ def ven_inventario(request):
 
     return render(request, 'empleado/vendedor/ven_inventario.html', {'empleado': empleado, 'productos': productos, 'categorias': categorias})
 
+def ven_facturacion(request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return redirect('home')  
+    try:
+        empleado = Empleado.objects.get(emp_id=request.session['user_id'])
+        print("Empleado ID from session:", request.session.get('user_id'))
+        print("Empleado Profile for current user:", empleado)
+    except Empleado.DoesNotExist:
+        return JsonResponse({'error': 'Empleado no encontrado'})
+    
+    facturas = Factura.objects.all()
+    return render(request, 'empleado/vendedor/ven_facturacion.html', {'empleado': empleado,'facturas': facturas })
 
+def crear_factura(request):
+    if request.method == 'POST':
+        factura_form = FacturaForm(request.POST)
+        
+        if factura_form.is_valid():
+            fac_cli_name = factura_form.cleaned_data['fac_cli_name']
+            fac_cli_rut = factura_form.cleaned_data['fac_cli_rut']
+            detalles = factura_form.cleaned_data['detalles']
+
+            # Obtener el ID del usuario de la sesión
+            user_id = request.session.get('user_id')
+            if not user_id:
+                return redirect('home')  # Redirigir si no hay ID de usuario en la sesión
+
+            try:
+                empleado = Empleado.objects.get(emp_id=user_id)
+            except Empleado.DoesNotExist:
+                return JsonResponse({'error': 'Empleado no encontrado'})
+
+            factura = Factura.objects.create(
+                fac_cli_name=fac_cli_name,
+                fac_cli_rut=fac_cli_rut,
+                vendedor=empleado,
+                detalles=detalles,
+                monto_total=0
+            )
+
+            # Redirigir a ven_facturacion después de crear la factura
+            return redirect('ven_facturacion')
+
+    else:
+        factura_form = FacturaForm()
+
+    context = {
+        'factura_form': factura_form,
+    }
+
+    return render(request, 'empleado/vendedor/ediciones/crear_factura.html', context)
+
+def agregar_a_factura(request, fac_id):
+    factura = get_object_or_404(Factura, fac_id=fac_id)
+
+    if request.method == 'POST':
+        factura_item_form = FacturaItemForm(request.POST)
+        
+        if factura_item_form.is_valid():
+            producto_id = factura_item_form.cleaned_data['producto'].prod_id
+            cantidad = factura_item_form.cleaned_data['cantidad']
+            producto = Inventario.objects.get(prod_id=producto_id)
+            precio_total = producto.prod_prec * cantidad
+
+            factura_item = FacturaItem.objects.create(
+                factura=factura,
+                producto=producto,
+                cantidad=cantidad,
+                precio=producto.prod_prec
+            )
+
+            factura.monto_total += precio_total
+            factura.save()
+
+            # Redirigir a agregar_a_factura nuevamente después de agregar un ítem
+            return redirect('agregar_a_factura', fac_id=fac_id)
+
+    else:
+        factura_item_form = FacturaItemForm()
+
+    productos_factura = FacturaItem.objects.filter(factura=factura)
+
+    context = {
+        'factura': factura,
+        'factura_item_form': factura_item_form,
+        'productos_factura': productos_factura,
+    }
+
+    return render(request, 'empleado/vendedor/ediciones/agregar_a_factura.html', context)
 
 """ ----------------------------------------Bodegueros------------------------------------- """
 
